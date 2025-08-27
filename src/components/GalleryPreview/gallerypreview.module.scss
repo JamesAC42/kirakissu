@@ -1,0 +1,19 @@
+.galleryPreview {
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    gap:1rem;
+    .galleryPreviewItem {
+        width:100%;
+        height:100%;
+
+        img {
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+        &:hover {
+            cursor: var(--pointer-cursor-url), auto;
+        }
+    }
+}

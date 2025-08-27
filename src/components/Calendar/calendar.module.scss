@@ -1,0 +1,71 @@
+.calendarRoot {
+    font-family: var(--font-pixel-mix);
+}
+
+.calendarHeader {
+    display:flex;
+    flex-direction:column;
+    gap:0.25rem;
+    margin-bottom:0.5rem;
+}
+.calendarTitle {
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin:0.5rem 0;
+    color:#d35e89;
+}
+.calendarInfo {
+    font-size: 0.8rem;
+    font-family: var(--font-pixel-mix);
+    color:#8a6271;
+}
+.calendarFacts {
+    margin:0;
+    padding-left:1.25rem;
+    font-size:0.8rem;
+    margin-top:5px;
+    color:#8a6271;
+    font-family: var(--font-pixel-mix);
+}
+
+.calendarWeekdays {
+    display:grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    margin-bottom:0.25rem;
+    font-weight:700;
+    color:#8a6271;
+}
+.calendarWeekday {
+    text-align:center;
+}
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+    text-align: center;
+}
+.calendarCell {
+    background:#ffe1f9;
+    border: 0.0625rem solid #ffb3c1;
+    min-height: 2.5rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: var(--font-pixel-mix);
+    font-weight:400;
+    font-size:0.6rem;
+}
+.calendarCellOtherMonth {
+    opacity:0.4;
+}
+.calendarCellToday {
+    outline: 0.125rem solid #ff89b0;
+    outline-offset: -0.125rem;
+    background:#ffd1e6;
+    box-shadow: inset 0 0 0 0.125rem #fff;
+    font-weight:700;
+}
+
+

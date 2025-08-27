@@ -1,0 +1,42 @@
+.window {
+    .windowHeader {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:5px;
+        background:#ff90a3;
+        background:linear-gradient(to right, #fc4d6d, #ffafbd);
+        background:linear-gradient(to right, #ff7992, #fad5ff);
+
+        font-family: var(--font-nunito);
+        font-weight:400;
+        color:#fff;
+
+        .windowHeaderText {
+            font-family: var(--font-starborn);
+            font-size:1rem;
+        }
+
+        .windowButtons {
+            display:flex;
+            gap:0;
+
+            .windowButtonContainer {
+                padding:0;
+
+                &:last-child {
+                    margin-left:5px;
+                }
+
+                .windowButton {
+                    width:10px;
+                    height:10px;
+
+                    &.windowButtonMinimize {
+                        transform:translateY(3px);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,120 @@
+:root {
+    --default-cursor-url: url('../assets/images/cursors/_umbrella-cursor.png');
+    --pointer-cursor-url: url('../assets/images/cursors/_msp-cursor.png');
+}
+
+body {
+    cursor: var(--default-cursor-url), auto;
+}
+
+.plaidBackground {
+    background-image: url('../assets/images/backgrounds/argyle.jpg');
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.windowStyle {
+    border-top: 3px solid #fff;
+    border-left: 3px solid #fff;
+    border-right: 3px solid #a9a9a9;
+    border-bottom: 3px solid #a9a9a9;
+    border-right: 3px solid #f8c6da;
+    border-bottom: 3px solid #f8c6da;
+    outline: 1px solid #adadad;
+
+    box-shadow: 1px 1px 0 1px #a3328b;
+    
+    padding: 0;
+    background-color: #fff7fa;
+    color: #000;
+}
+
+.scrollArea {
+    
+
+    &::-webkit-scrollbar:horizontal {
+        height: 17px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 17px
+    }
+
+    &::-webkit-scrollbar-corner {
+        background: #dfdfdf;
+    }
+
+    &::-webkit-scrollbar-track:vertical {
+        background: linear-gradient(90deg, #ebebeb 0%, #fff 100%);
+    }
+
+    &::-webkit-scrollbar-track:horizontal {
+        background: linear-gradient(#ebebeb 0%, #fff 100%);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-image: url("../assets/images/scrollbar/scroll.png");
+        background-color: #ffe1f0;
+        background-size: 20px;
+        border: 1px solid #fff;
+        border-radius: 2px;
+        box-shadow: inset -3px 0 #ffccd8, inset 1px 1px #ffa0be;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-image: url("../assets/images/scrollbar/scrollhover.png");
+        background-size: 20px;
+        background-color: #ffbcd1;
+        border: 1px solid #fff;
+        border-radius: 2px;
+        box-shadow: inset -3px 0 #FFA6CD, inset 1px 1px #f3adcb;
+    }
+
+    &::-webkit-scrollbar-button {
+        background-color: #FFD7E8;
+        background-size: 15px;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: 1px solid #FFA5D2;
+        border-radius: 5px;
+        box-shadow: inset -3px 0 #ffcce2;
+    }
+
+    &::-webkit-scrollbar-button:vertical:increment {
+        background-image: url("../assets/images/scrollbar/down.png");
+    }
+    
+    &::-webkit-scrollbar-button:vertical:decrement {
+        background-image: url("../assets/images/scrollbar/up.png");
+    }
+    
+    &::-webkit-scrollbar-button:horizontal:increment {
+        background-image: url("../assets/images/scrollbar/right.png");
+    }
+
+    &::-webkit-scrollbar-button:horizontal:decrement {
+        background-image: url("../assets/images/scrollbar/left.png");
+    }
+    
+    &::-webkit-scrollbar-button:vertical:start:increment,
+    &::-webkit-scrollbar-button:vertical:end:decrement,
+    &::-webkit-scrollbar-button:horizontal:start:increment,
+    &::-webkit-scrollbar-button:horizontal:end:decrement {
+        display: none;
+        height: 0;
+        background: none;
+        border: 0;
+        box-shadow: none;
+    }
+
+    &::-webkit-scrollbar-button:double-button {
+        display: none;
+    }
+
+}

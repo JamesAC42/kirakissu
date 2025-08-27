@@ -1,0 +1,33 @@
+- diary/ blog
+- about me
+- photo gallery
+    - fashion
+    - makeup
+    - magazine scans
+    - photos + captions/blurb
+    - like a scrapbook
+    - comments (on page not photos)
+- my favorite things
+    - songs, makeup products, skincare, etc
+    - comments
+- guestbook - message board for visitors to leave comments
+    - ask favorite sanrio character
+- quiz/survey page for engagement
+- anime tracker
+- music playlist
+- currently intersted in section
+
+
+things to add to homepage:
+- custom music player styled like old windows media player, play tommy airline
+- anilist section with currently watching + link to anilist profile
+- blog posts section with most popular + recently added
+- gallery preview section show actual pictures with some kind of interactive carousel animation
+- window hover: show a character peeking out from behind window
+- character floating bottom corners
+- todo list section / goals
+- copyright/additional info section at bottom
+- social media section + ribbon at top
+    - twitter, instagram, tiktok, anilist, pinterest
+- faq section
+- analytics section (page views, most viewed pages, etc)
