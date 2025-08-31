@@ -9,7 +9,8 @@ import {
   nunito, 
   starborn,
   notoSansJP,
-  pixelMix
+  pixelMix,
+  chalktastic
 } from "@/styles/fonts";
 
 export const metadata: Metadata = {
@@ -26,7 +27,8 @@ const fonts = [
   checkpoint, 
   starborn,
   notoSansJP,
-  pixelMix
+  pixelMix,
+  chalktastic
 ];
 
 export default function RootLayout({

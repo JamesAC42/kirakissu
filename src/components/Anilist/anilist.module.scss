@@ -14,7 +14,7 @@
         padding:0.5rem;
         align-items:flex-end;
         flex-direction:row;
-        gap:1rem;
+        gap:0.25rem;
 
         img {
             margin-right:1rem;
@@ -22,6 +22,7 @@
 
         a {
             margin-bottom:0.5rem;
+            cursor: var(--pointer-cursor-url), auto;
         }
 
         a:hover {
@@ -30,7 +31,8 @@
     }
 
     .stickerContainer {
-        margin-left:1rem;
+        margin-left:2rem;
+        transform:translateY(-1rem);
     }
 }
 

@@ -62,12 +62,13 @@
     height: 1.25rem;
     background: linear-gradient(145deg, #ffd1e6, #ffffff);
     border: 0.125rem solid #ffb3c1;
-    border-right-color: #fff;
-    border-bottom-color: #fff;
+    border-left-color: #fff;
+    border-top-color: #fff;
     border-radius: 0.125rem;
     margin-top: -0.375rem; /* centers on 0.5rem track */
     box-shadow: 0.0625rem 0.0625rem 0 0 #524242, 0.0625rem 0.0625rem 0 0 #ffffff;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 /* Firefox */
@@ -79,6 +80,7 @@
     border-bottom-color: #fff;
     border-radius: 0.125rem;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 .seekBar input[type="range"]::-moz-range-thumb {
@@ -86,11 +88,12 @@
     height: 1.25rem;
     background: linear-gradient(145deg, #ffd1e6, #ffffff);
     border: 0.125rem solid #ffb3c1;
-    border-right-color: #fff;
-    border-bottom-color: #fff;
+    border-top-color: #fff;
+    border-left-color: #fff;
     border-radius: 0.125rem;
     box-shadow: -0.0625rem -0.0625rem 0 0 #524242, 0.0625rem 0.0625rem 0 0 #ffffff;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 .timeDisplay {
@@ -155,12 +158,13 @@
     height: 1.25rem;
     background: linear-gradient(145deg, #ffd1e6, #ffffff);
     border: 0.125rem solid #ffb3c1;
-    border-right-color: #fff;
-    border-bottom-color: #fff;
+    border-left-color: #fff;
+    border-top-color: #fff;
     border-radius: 0.125rem;
     margin-top: -0.375rem;
     box-shadow: 0.0625rem 0.0625rem 0 0 #524242, 0.0625rem 0.0625rem 0 0 #ffffff;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 .volumeControl input[type="range"]::-moz-range-track {
@@ -171,6 +175,7 @@
     border-bottom-color: #fff;
     border-radius: 0.125rem;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 .volumeControl input[type="range"]::-moz-range-thumb {
@@ -178,11 +183,12 @@
     height: 1.25rem;
     background: linear-gradient(145deg, #ffd1e6, #ffffff);
     border: 0.125rem solid #ffb3c1;
-    border-right-color: #fff;
-    border-bottom-color: #fff;
+    border-left-color: #fff;
+    border-top-color: #fff;
     border-radius: 0.125rem;
     box-shadow: 0.0625rem 0.0625rem 0 0 #524242, 0.0625rem 0.0625rem 0 0 #ffffff;
     cursor: var(--pointer-cursor-url), auto;
+    transform:translateX(-1px);
 }
 
 .seekBar input[type="range"]:focus,
