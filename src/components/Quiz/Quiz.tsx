@@ -4,12 +4,12 @@ import styles from "./quiz.module.scss";
 import { useState } from "react";
 import { Button } from "../Button/Button";
 
-type QuizOption = {
+export type QuizOption = {
     id: string;
     label: string;
 };
 
-const QUIZ_OPTIONS: QuizOption[] = [
+export const QUIZ_OPTIONS: QuizOption[] = [
     { id: "cinnamoroll", label: "Cinnamoroll" },
     { id: "hello-kitty", label: "Hello Kitty" },
     { id: "pompompurin", label: "Pompompurin" },
@@ -18,7 +18,13 @@ const QUIZ_OPTIONS: QuizOption[] = [
 
 const CORRECT_ANSWER_ID = "cinnamoroll";
 
-export const Quiz = () => {
+export interface IQuizProps {
+    question: string;
+    options: QuizOption[];
+    correctAnswerId: string;
+}
+
+export const Quiz = (props: IQuizProps) => {
     const [selectedOptionId, setSelectedOptionId] = useState<string>("");
     const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 
@@ -39,7 +45,7 @@ export const Quiz = () => {
         <div className={styles.quizRoot}>
             <div className={styles.quizHeader}>sanrio trivia</div>
             <p className={styles.quizQuestion}>
-                Which Sanrio character is a white puppy with long, floppy ears that can fly? <span className={styles.jp}>どのサンリオのキャラクターが長い耳で飛べる白い子犬？</span>
+                {props.question}
             </p>
 
             <div className={styles.quizOptions}>

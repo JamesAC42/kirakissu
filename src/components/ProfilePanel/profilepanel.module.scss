@@ -1,0 +1,34 @@
+
+.aboutMe {
+    text-align:center;
+    padding:0 1rem;
+    .profilePictureContainer {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        margin-top:1rem;
+
+        img {
+            width:14rem;
+            height:auto;
+        }
+        margin-bottom:1rem;
+    }
+
+    p {
+        font-size:1rem;
+
+        &.hi {
+            text-align:center;
+            font-size:1.2rem;
+        }
+
+        &.flags {
+            margin-top:0.5rem;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            gap:0.5rem;
+        }
+    }
+}

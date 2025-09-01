@@ -1,0 +1,31 @@
+.pollFormContainer {
+    background:#ffeef59a;
+    backdrop-filter:blur(10px);
+    padding:1rem;
+    border:1px solid #ff8cb6;
+    font-family: var(--font-pixel-mix);
+
+    font-size:0.9rem;
+    color:#ff647e;
+
+    p {
+        margin-bottom:1rem;
+    }
+
+    .pollForm {
+        display: grid;
+        gap: 0.25rem;
+        label, input {
+            margin:4px 0;
+            cursor: var(--pointer-cursor-url), auto;
+            &:hover {
+                cursor: var(--pointer-cursor-url), auto;
+            }
+        }
+    }
+    .pollButtonContainer {
+        margin-top:1rem;
+        display:flex;
+        gap:0.5rem;
+    }
+}

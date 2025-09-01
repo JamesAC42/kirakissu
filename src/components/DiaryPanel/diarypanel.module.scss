@@ -1,0 +1,40 @@
+
+
+.diaryWindow {
+    overflow-y: auto;
+    max-height:30rem;
+    .diaryEntry { 
+        position:relative;
+        margin-bottom: 1rem; 
+        padding:1rem;
+        border:1px solid #ff8cb6;
+        box-shadow: inset 1px 1px 0 0 #ffffff, 1px 1px 0 0 #ffffff;
+
+        h3 {
+            margin:0;
+            border-bottom:2px dotted #ff8cb6;
+            padding:0.25rem 0.5rem;
+            font-family: var(--font-pixel-mix);
+            color:#ff8cb6;
+        }
+
+        p {
+            margin:1rem 0;
+            padding:0.25rem 0.5rem;
+        }
+
+        .diaryButtonContainer {
+            padding:0;
+            display:flex;
+            justify-content: flex-end;
+            margin-top:4rem;
+        }
+
+        .diaryStickerContainer {
+            position:absolute;
+            bottom:0;
+            left:0;
+            padding:1.5rem 1.5rem;
+        }
+    }
+}

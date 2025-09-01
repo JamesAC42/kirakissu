@@ -118,3 +118,15 @@ body {
     }
 
 }
+
+.windowContent {
+    padding:0.5rem;
+
+    p {
+        margin:0;
+    }
+
+    .bold {
+        font-weight:700;
+    }
+}

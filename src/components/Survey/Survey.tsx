@@ -9,15 +9,12 @@ type SurveyChoice = {
     label: string;
 };
 
-const CHOICES: SurveyChoice[] = [
-    { id: "music", label: "More music recommendations" },
-    { id: "fashion", label: "Fashion & gyaru coords" },
-    { id: "beauty", label: "Health & beauty tips" },
-    { id: "travel", label: "Tokyo life & travel" },
-    { id: "coding", label: "Coding and dev logs" }
-];
+export interface ISurveyProps {
+    question: string;
+    choices: SurveyChoice[];
+}
 
-export const Survey = () => {
+export const Survey = (props: ISurveyProps) => {
     const [selections, setSelections] = useState<Record<string, boolean>>({});
     const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -38,10 +35,10 @@ export const Survey = () => {
         <div className={styles.surveyRoot}>
             <div className={styles.surveyHeader}>mini survey</div>
             <p className={styles.surveyQuestion}>
-                What content would you like to see more of? <span className={styles.jp}>どんなコンテンツが見たい？</span>
+                {props.question}
             </p>
             <div className={styles.surveyOptions}>
-                {CHOICES.map((choice) => (
+                {props.choices.map((choice) => (
                     <label key={choice.id} className={`${styles.surveyOption} windowStyle`}>
                         <input
                             type="checkbox"

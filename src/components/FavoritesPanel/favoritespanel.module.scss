@@ -1,0 +1,20 @@
+
+
+.favoritesList {
+    font-family: var(--font-pixel-mix);
+    list-style:none;
+    padding:0;
+    margin:0;
+    li {
+        strong {
+            font-weight:500;
+            color:#ef77bb;
+        }
+        margin:0.5rem 0;
+        padding:0.5rem 0.5rem;
+        color:#836074;
+        border:1px solid #ff8cb6;
+        background:#ffeef59a;
+        backdrop-filter:blur(10px);
+    }
+}
