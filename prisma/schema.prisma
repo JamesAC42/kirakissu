@@ -1,0 +1,151 @@
+// Prisma schema for kirakissu homepage data and simple admin flows
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SettingsKV {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model ScrapbookItem {
+  id        String    @id @default(uuid())
+  imageUrl  String
+  caption   String
+  takenAt   DateTime?
+  album     String?
+  tags      Json?
+  createdAt DateTime  @default(now())
+
+  @@index([createdAt])
+}
+
+model GuestbookEntry {
+  id         String   @id @default(uuid())
+  name       String
+  message    String
+  email      String?
+  createdAt  DateTime @default(now())
+  isApproved Boolean  @default(false)
+  ipHash     String
+
+  @@index([createdAt])
+  @@index([isApproved])
+}
+
+model Poll {
+  id         String       @id @default(uuid())
+  question   String
+  activeFrom DateTime?
+  activeTo   DateTime?
+  options    PollOption[]
+  votes      PollVote[]
+
+  @@index([activeFrom, activeTo])
+}
+
+model PollOption {
+  id     String @id @default(uuid())
+  label  String
+  sort   Int    @default(0)
+  poll   Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  pollId String
+
+  votes PollVote[]
+
+  @@index([pollId])
+  @@index([sort])
+}
+
+model PollVote {
+  id        String     @id @default(uuid())
+  poll      Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  pollId    String
+  option    PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId  String
+  voterHash String
+  createdAt DateTime   @default(now())
+
+  @@index([pollId])
+  @@index([optionId])
+  @@index([voterHash])
+}
+
+model Quiz {
+  id              String       @id @default(uuid())
+  question        String
+  active          Boolean      @default(false)
+  correctOption   QuizOption?  @relation("CorrectOption", fields: [correctOptionId], references: [id])
+  correctOptionId String?      @unique
+  options         QuizOption[]
+  votes           QuizVote[]
+}
+
+model QuizOption {
+  id         String @id @default(uuid())
+  label      String
+  sort       Int    @default(0)
+  quiz       Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId     String
+  correctFor Quiz?  @relation("CorrectOption")
+  votes      QuizVote[]
+
+  @@index([quizId])
+  @@index([sort])
+}
+
+model Survey {
+  id       String         @id @default(uuid())
+  question String
+  active   Boolean        @default(false)
+  options  SurveyOption[]
+  votes    SurveyVote[]
+}
+
+model SurveyOption {
+  id       String @id @default(uuid())
+  label    String
+  sort     Int    @default(0)
+  survey   Survey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  surveyId String
+
+  votes SurveyVote[]
+
+  @@index([surveyId])
+  @@index([sort])
+}
+
+model SurveyVote {
+  id        String       @id @default(uuid())
+  survey    Survey       @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  surveyId  String
+  option    SurveyOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId  String
+  voterHash String
+  createdAt DateTime     @default(now())
+
+  @@index([surveyId])
+  @@index([optionId])
+  @@index([voterHash])
+}
+
+model QuizVote {
+  id        String     @id @default(uuid())
+  quiz      Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String
+  option    QuizOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId  String
+  voterHash String
+  createdAt DateTime   @default(now())
+
+  @@index([quizId])
+  @@index([optionId])
+  @@index([voterHash])
+}

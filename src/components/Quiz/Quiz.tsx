@@ -9,14 +9,7 @@ export type QuizOption = {
     label: string;
 };
 
-export const QUIZ_OPTIONS: QuizOption[] = [
-    { id: "cinnamoroll", label: "Cinnamoroll" },
-    { id: "hello-kitty", label: "Hello Kitty" },
-    { id: "pompompurin", label: "Pompompurin" },
-    { id: "kuromi", label: "Kuromi" }
-];
-
-const CORRECT_ANSWER_ID = "cinnamoroll";
+// Options and correct answer are provided by props
 
 export interface IQuizProps {
     question: string;
@@ -27,10 +20,28 @@ export interface IQuizProps {
 export const Quiz = (props: IQuizProps) => {
     const [selectedOptionId, setSelectedOptionId] = useState<string>("");
     const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const handleSubmit = () => {
-        if (!selectedOptionId) return;
-        setHasSubmitted(true);
+        if (!selectedOptionId || submitting) return;
+        setSubmitting(true);
+        setError("");
+        fetch("/api/quizzes/vote", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ optionId: selectedOptionId }),
+        })
+        .then(async (resp) => {
+            if (!resp.ok) {
+                const text = await resp.text();
+                setError(text || "Failed to submit");
+                return;
+            }
+            setHasSubmitted(true);
+        })
+        .catch(() => setError("Network error"))
+        .finally(() => setSubmitting(false));
     };
 
     const handleReset = () => {
@@ -38,8 +49,8 @@ export const Quiz = (props: IQuizProps) => {
         setHasSubmitted(false);
     };
 
-    const isCorrect = hasSubmitted && selectedOptionId === CORRECT_ANSWER_ID;
-    const isIncorrect = hasSubmitted && selectedOptionId !== CORRECT_ANSWER_ID;
+    const isCorrect = hasSubmitted && !!props.correctAnswerId && selectedOptionId === props.correctAnswerId;
+    const isIncorrect = hasSubmitted && !!selectedOptionId && !!props.correctAnswerId && selectedOptionId !== props.correctAnswerId;
 
     return (
         <div className={styles.quizRoot}>
@@ -49,7 +60,7 @@ export const Quiz = (props: IQuizProps) => {
             </p>
 
             <div className={styles.quizOptions}>
-                {QUIZ_OPTIONS.map((opt) => (
+                {props.options.map((opt) => (
                     <label key={opt.id} className={`${styles.quizOption} windowStyle`}>
                         <input
                             type="radio"
@@ -57,6 +68,7 @@ export const Quiz = (props: IQuizProps) => {
                             value={opt.id}
                             checked={selectedOptionId === opt.id}
                             onChange={() => setSelectedOptionId(opt.id)}
+                            disabled={hasSubmitted}
                         />
                         <span>{opt.label}</span>
                     </label>
@@ -65,14 +77,15 @@ export const Quiz = (props: IQuizProps) => {
 
             <div className={styles.quizActions}>
                 {!hasSubmitted ? (
-                    <Button text="Submit" onClick={handleSubmit} />
+                    <Button text={submitting ? "Submitting..." : "Submit"} onClick={handleSubmit} />
                 ) : (
                     <>
-                        {isCorrect && <span className={`${styles.quizResult} ${styles.correct}`}>Correct! ♡ Cinnamoroll!</span>}
+                        {isCorrect && <span className={`${styles.quizResult} ${styles.correct}`}>Correct! ♡</span>}
                         {isIncorrect && <span className={`${styles.quizResult} ${styles.incorrect}`}>Not quite — try again!</span>}
                         <Button text="Try again" onClick={handleReset} />
                     </>
                 )}
+                {!!error && <span style={{ marginLeft: "1rem" }}>{error}</span>}
             </div>
         </div>
     );
