@@ -1,6 +1,6 @@
 "use client";
 import styles from './anilist.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { AniListCollection } from '@/lib/anilist';
 import { Button } from '../Button/Button';
 import { Window } from '../Window/Window';
@@ -12,9 +12,11 @@ export default function Anilist(props: Props) {
     const user = props.user || 'yuckitsyue';
     const [collection, setCollection] = useState<AniListCollection | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const fetchedRef = useRef(false);
 
     useEffect(() => {
-        let isMounted = true;
+        if (fetchedRef.current) return;
+        fetchedRef.current = true;
         const load = async () => {
             try {
                 const res = await fetch(`/api/anilist?user=${encodeURIComponent(user)}`, { cache: 'no-store' });
@@ -22,13 +24,12 @@ export default function Anilist(props: Props) {
                 if (!json.ok) {
                     throw new Error(json.error || 'Request failed');
                 }
-                if (isMounted) setCollection(json.collection as AniListCollection);
+                setCollection(json.collection as AniListCollection);
             } catch (e: unknown) {
-                if (isMounted) setErrorMessage(e instanceof Error ? e.message : 'Failed to load AniList data');
+                setErrorMessage(e instanceof Error ? e.message : 'Failed to load AniList data');
             }
         };
         load();
-        return () => { isMounted = false; };
     }, [user]);
 
     if (errorMessage) return <div className={styles.error}>Failed to load AniList data: {errorMessage}</div>;

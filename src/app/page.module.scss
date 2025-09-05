@@ -4,7 +4,21 @@
     left:0;
     height:100dvh;
     width:100dvw;
-    background:#ffe1f9;
+    background:#fff2f9;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-family: var(--font-pixel-mix);
+    color:#ff637d;
+    .loadingImage {
+        padding:1rem;
+
+        img {
+            width:300px;
+            height:auto;
+        }
+    }
 }
 
 .homeContainer {
