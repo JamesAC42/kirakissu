@@ -18,3 +18,33 @@
         }
     }
 }
+
+.metricsContainer {
+    display:grid;
+    padding:1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    .metricsItem {
+        h3 {
+            font-family: var(--font-pixel-mix);
+            color:#7a5050;
+            font-weight:400;
+            font-size:0.9rem;
+            opacity:0.6;
+        }
+        p {
+            font-family: var(--font-pixel-mix);
+            color:#7a5050;
+            font-weight:700;
+            font-size:1rem;
+            margin:1rem 0;
+            padding-left:1rem;
+            span.statValue {
+                color:#ff97b1;
+            }
+            span.statTitle {
+                color:#9c7872;
+            }
+        }
+    }
+}
