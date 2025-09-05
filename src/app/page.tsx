@@ -41,6 +41,8 @@ import xlogo from "@/assets/images/social media/x.png";
 import pinterest from "@/assets/images/social media/pinterest.png";
 import email from "@/assets/images/social media/email.png";
 
+import orbit from "@/assets/images/orbit.gif";
+
 // import sheep from "@/assets/images/homepage/sheep.gif";
 // import sailormoonstamp from "@/assets/images/stamps/sailormoon.png";
 
@@ -121,8 +123,21 @@ export default function Home() {
     load();
   }, []);
 
-  if (hasSeenWelcome === null) {
-    return <div className={styles.loadingContainer}></div>
+  if (hasSeenWelcome === null || homeData === null) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingContent}>
+          <div className={styles.loadingText}>
+            <h1>Loading...</h1>
+          </div>
+        </div>
+        <Window header="home_planet.gif">
+          <div className={styles.loadingImage}>
+            <Image src={orbit} alt="orbit" width={400} height={400} />
+          </div>
+        </Window>
+      </div>
+    )
   }
 
   return (
