@@ -106,7 +106,7 @@ export async function GET() {
                 const topPagesUrl = `${base}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAtMonth}&endAt=${endAt}&type=url&limit=5`;
 
                 // Attempt known realtime endpoints, prefer global realtime first per docs
-                const realtimeActiveUrlPrimary = `${base}/realtime/active?websiteId=${UMAMI_WEBSITE_ID}`;
+                const realtimeActiveUrlPrimary = `${base}/realtime/${UMAMI_WEBSITE_ID}`;
                 const realtimeActiveUrlFallback = `${base}/websites/${UMAMI_WEBSITE_ID}/active`;
 
                 const [statsAll, statsMonth, statsWeek, statsDay, pageviewsSeries, topPages, realtimePrimary, topReferrers, topCountries, topLanguages] = await Promise.all([
@@ -165,22 +165,6 @@ export async function GET() {
                     : "N/A";
 
                 const mostVisitedPage = topPages[0]?.x || "";
-                let topReferrer = topReferrers[0]?.x || "";
-                let topCountry = topCountries[0]?.x || "";
-                let topLanguage = topLanguages[0]?.x || "";
-
-                // Fallback to all-time for top metrics if 30d window is empty
-                if (!topReferrer || !topCountry || !topLanguage) {
-                    const topPagesUrlAll = `${base}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAtAllTime}&endAt=${endAt}&type=url&limit=1`;
-                    const [refAll, countryAll, langAll] = await Promise.all([
-                        fetchJson<{ data: UmamiMetricItem[] }>(`${topPagesUrlAll.replace('type=url','type=referrer')}`).catch(() => ({ data: [] })),
-                        fetchJson<{ data: UmamiMetricItem[] }>(`${topPagesUrlAll.replace('type=url','type=country')}`).catch(() => ({ data: [] })),
-                        fetchJson<{ data: UmamiMetricItem[] }>(`${topPagesUrlAll.replace('type=url','type=language')}`).catch(() => ({ data: [] })),
-                    ]);
-                    if (!topReferrer) topReferrer = (refAll.data && refAll.data[0]?.x) || "N/A";
-                    if (!topCountry) topCountry = (countryAll.data && countryAll.data[0]?.x) || "N/A";
-                    if (!topLanguage) topLanguage = (langAll.data && langAll.data[0]?.x) || "N/A";
-                }
 
                 const visitsMonth = toValue(statsMonth.visits) || toValue(statsMonth.visitors) || toValue(statsMonth.uniques);
                 const pageviewsMonth = toValue(statsMonth.pageviews);
@@ -203,9 +187,6 @@ export async function GET() {
                     mostVisitedPage,
                     mostActiveHour,
                     averageVisitDuration: formatDurationFromSeconds(averageVisitDurationSeconds),
-                    topReferrer,
-                    topCountry,
-                    topLanguage,
                     topPages,
                     topReferrers,
                     topCountries,

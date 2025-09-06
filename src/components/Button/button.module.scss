@@ -56,4 +56,12 @@
             }
         }
     }
+
+    &.active {
+        .buttonInner {
+            .buttonText {
+                color:#7c82f5;
+            }
+        }
+    }
 }

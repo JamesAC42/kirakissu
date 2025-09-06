@@ -26,7 +26,8 @@ export const StatsPanel = () => {
         fetchStats();
     }, []);
 
-    const addCommas = (value: number) => {
+    const addCommas = (value: number | string) => {
+        if (typeof value === "string") return value;
         return value.toLocaleString();
     }
 
@@ -47,9 +48,6 @@ export const StatsPanel = () => {
                         mostVisitedPage: "Most Visited Page",
                         mostActiveHour: "Most Active Hour",
                         averageVisitDuration: "Avg Visit Duration",
-                        topReferrer: "Top Referrer",
-                        topCountry: "Top Country",
-                        topLanguage: "Top Language",
                     };
                     const order = [
                         "totalVisits",
@@ -64,14 +62,11 @@ export const StatsPanel = () => {
                         "mostVisitedPage",
                         "mostActiveHour",
                         "averageVisitDuration",
-                        "topReferrer",
-                        "topCountry",
-                        "topLanguage",
                     ];
                     return (
                         <>
                         {order.filter((key) => key in stats).map((key) => (
-                            <p key={key}><span className={styles.statTitle}>{labels[key] || key}:</span> {addCommas(Number(stats[key]))}</p>
+                            <p key={key}><span className={styles.statTitle}>{labels[key] || key}:</span> {addCommas(stats[key])}</p>
                         ))}
                         </>
                     );

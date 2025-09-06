@@ -60,7 +60,12 @@ export async function fetchAniListCollection(userName: string): Promise<AniListC
 
     const res = await fetch('https://graphql.anilist.co', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            // Provide a UA to avoid some providers blocking generic fetch clients
+            'User-Agent': 'kirakissu/1.0 (+https://kirakissu.com)'
+        },
         body: JSON.stringify({ query: QUERY, variables }),
         // Ensure fresh data on the server when desired; callers can override via fetch cache options
         cache: 'no-store',

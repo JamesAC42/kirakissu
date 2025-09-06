@@ -58,7 +58,7 @@ export const Window = ({
                     }
                 </div>
             }
-            <div className={`${styles.windowContent} ${scrollable ? "scrollArea" : ""} ${contentClass}`}>
+            <div className={`${scrollable ? "scrollArea" : ""} ${contentClass}`}>
                 {children}
             </div>
         </div>

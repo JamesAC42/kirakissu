@@ -57,6 +57,14 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                             <p>{post.content}</p>
                         </div>
                     ))}
+
+                    {
+                        props.recentPosts.length === 0 && (
+                            <div className={styles.noPosts}>
+                                <p>No recent posts</p>
+                            </div>
+                        )
+                    }
                 </div>
                 <div className={styles.blogSection}>
                     <div className={styles.blogCategoryTitle}>
@@ -71,6 +79,14 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                             <p>{post.content}</p>
                         </div>
                     ))}
+
+                    {
+                        props.popularPosts.length === 0 && (
+                            <div className={styles.noPosts}>
+                                <p>No popular posts</p>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>

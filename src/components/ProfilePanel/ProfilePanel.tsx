@@ -12,7 +12,7 @@ export interface IProfilePanelProps {
 
 export const ProfilePanel = (data: IProfilePanelProps) => {
     return (
-        <div className={`windowContent} ${styles.aboutMe}`}>
+        <div className={`windowContent ${styles.aboutMe}`}>
           <div className={styles.profilePictureContainer}>
               <Image src={yawnprofile} alt="profile" className={styles.profileImage} />
           </div>

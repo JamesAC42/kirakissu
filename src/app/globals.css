@@ -33,6 +33,52 @@ body {
     color: #000;
 }
 
+.pageContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100dvh;
+    width: 100vw;
+    z-index: 1000;
+
+    background-image: url('../assets/images/backgrounds/curtain.jpg');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    overflow-y: scroll;
+
+    gap: 1rem;
+    
+    font-family: var(--font-nunito);
+
+    .stickyLeft,
+    .stickyRight {
+        margin-top:5rem;
+        position: sticky;   
+        top: 2.5rem;
+        height: 40dvh;
+        width: 18rem;
+        display: flex;
+        flex-direction:column;
+        gap:1rem;
+    }
+
+    .pageContent {
+        flex-grow:1;
+        padding:1rem;
+        max-width:70dvw;
+    }
+
+}
+
 .scrollArea {
     
 

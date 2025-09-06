@@ -33,6 +33,12 @@ export const DiaryPanel = (props: IDiaryPanelProps) => {
                         </div>
                     ))
                 }
+
+                {
+                    props.entries.length === 0 && (
+                        <p className={styles.diaryEmpty}>No diary entries yet!</p>
+                    )
+                }
             </div>
         </Window>
     )

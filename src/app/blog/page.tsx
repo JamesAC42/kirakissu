@@ -1,7 +1,13 @@
+"use client";
+
+import styles from "./page.module.scss";
+import { Button } from "@/components/Button/Button";
+import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
+
 export default function Blog() {
     return (
-        <div>
-            <h1>Blog</h1>
-        </div>
+        <PageWrapper header="blog" subHeader="blog">
+            <Button text="Home" onClick={() => {}} />
+        </PageWrapper>
     )
 }

@@ -42,6 +42,7 @@ import pinterest from "@/assets/images/social media/pinterest.png";
 import email from "@/assets/images/social media/email.png";
 
 import orbit from "@/assets/images/orbit.gif";
+import { VerticalNav } from "@/components/VerticalNav/VerticalNav";
 
 // import sheep from "@/assets/images/homepage/sheep.gif";
 // import sailormoonstamp from "@/assets/images/stamps/sailormoon.png";
@@ -146,8 +147,8 @@ export default function Home() {
       hasSeenWelcome ? 
       <Welcome onEnter={onEnter}/> 
       : 
-      <div className={`${styles.homeContainer} scrollArea`}>
-        <div className={styles.stickyLeft}>
+      <div className={`pageContainer scrollArea`}>
+        <div className={`stickyLeft`}>
           <Window header="about me" showButtons={true}>
             <ProfilePanel 
               headerText={homeData?.profile?.headerText} 
@@ -386,18 +387,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={styles.stickyRight}>
+        <div className={`stickyRight`}>
           <Window header="quick links">
-            <div className={`windowContent`}>
-              <div className={styles.verticalNav}>
-                <Button text="Home" onClick={() => router.push("/")} />
-                <Button text="About Me" onClick={() => router.push("/aboutme")} />
-                <Button text="Blog" onClick={() => router.push("/blog")} />
-                <Button text="Diary" onClick={() => router.push("/diary")} />
-                <Button text="Scrapbook" onClick={() => router.push("/scrapbook")} />
-                <Button text="Guestbook" onClick={() => router.push("/guestbook")} /> 
-              </div>
-            </div>
+            <VerticalNav />
           </Window>
           <Window header="calendar" showButtons={true}>
             <div className={`windowContent`}>
