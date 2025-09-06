@@ -65,6 +65,7 @@ import { PollPanel, IPollPanelProps } from "@/components/PollPanel/PollPanel";
 import { TodoPanel, ITodoPanelProps } from "@/components/TodoPanel/TodoPanel";
 import { BlogPanel, IBlogPanelProps } from "@/components/BlogPanel/BlogPanel";
 import { StatsPanel } from "@/components/StatsPanel/StatsPanel";
+import HeaderBox from "@/components/HeaderBox/HeaderBox";
 
 interface HomeState {
   profile: IProfilePanelProps;
@@ -163,49 +164,34 @@ export default function Home() {
           <div id="top" />
           <div className={styles.windowsGrid}>
             <div className={`${styles.spanFull} ${styles.headerContainer}`}>
-              <Window>
-                <div className={styles.headerContent}>
-                  <div className={`windowContent`}>
-                    <div className={styles.bowBackgroundContainer}>
-                      <Image src={bowbackground} alt="bow background" width={946} height={2048} className={styles.bowBackground} />
-                    </div>
-                    <div className={styles.headerContentInner}>
-                      <h1 className={styles.headerTitle}>kirakissu</h1>
-                      <p className={styles.headerSubtitle}><span className={styles.headerSubtitleText}>いらっしゃいませ!</span> 
-                      <br/>
-                      <span className={styles.headerSubtitleText2}>Welcome to my pink corner of the web</span> </p>
-                      <span className={styles.headerDecorTopRight}>
-                        <Image src={daisuki} alt="daisuki" width={500} height={500} />
-                      </span>
-                      <div className={styles.navButtons}>
-                        <Button text="Blog" onClick={() => router.push("/blog")} />
-                        <Button text="About Me" onClick={() => router.push("/aboutme")} />
-                        <Button text="Diary" onClick={() => router.push("/diary")} />
-                        <Button text="Scrapbook" onClick={() => router.push("/scrapbook")} />
-                        <Button text="Guestbook" onClick={() => router.push("/guestbook")} />
+              
+              <HeaderBox header="kirakissu" subtitle="いらっしゃいませ!" subtitle2="Welcome to my pink corner of the web" showFlashy={true}>
+                <div className={styles.navButtons}>
+                  <Button text="Blog" onClick={() => router.push("/blog")} />
+                  <Button text="About Me" onClick={() => router.push("/aboutme")} />
+                  <Button text="Diary" onClick={() => router.push("/diary")} />
+                  <Button text="Scrapbook" onClick={() => router.push("/scrapbook")} />
+                  <Button text="Guestbook" onClick={() => router.push("/guestbook")} />
 
-                        <div className={styles.socialMediaContainer}>
-                          <Button small={true} onClick={() => window.open("https://www.tiktok.com/@kirakissu", "_blank")}>
-                            <Image src={tiktok} alt="tiktok" width={20} height={20} />
-                          </Button>
-                          <Button small={true} onClick={() => window.open("https://www.instagram.com/kirakissu", "_blank")}>
-                            <Image src={instagram} alt="instagram" width={20} height={20} />
-                          </Button>
-                          <Button small={true} onClick={() => window.open("https://www.x.com/kirakissu", "_blank")}>
-                            <Image src={xlogo} alt="x" width={20} height={20} />
-                          </Button>
-                          <Button small={true} onClick={() => window.open("https://www.pinterest.com/kirakissu", "_blank")}>
-                            <Image src={pinterest} alt="pinterest" width={20} height={20} />
-                          </Button>
-                          <Button small={true} onClick={() => window.open("mailto:admin@kirakissu.com", "_blank")}>
-                            <Image src={email} alt="email" width={20} height={20} />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                  <div className={styles.socialMediaContainer}>
+                    <Button small={true} onClick={() => window.open("https://www.tiktok.com/@kirakissu", "_blank")}>
+                      <Image src={tiktok} alt="tiktok" width={20} height={20} />
+                    </Button>
+                    <Button small={true} onClick={() => window.open("https://www.instagram.com/kirakissu", "_blank")}>
+                      <Image src={instagram} alt="instagram" width={20} height={20} />
+                    </Button>
+                    <Button small={true} onClick={() => window.open("https://www.x.com/kirakissu", "_blank")}>
+                      <Image src={xlogo} alt="x" width={20} height={20} />
+                    </Button>
+                    <Button small={true} onClick={() => window.open("https://www.pinterest.com/kirakissu", "_blank")}>
+                      <Image src={pinterest} alt="pinterest" width={20} height={20} />
+                    </Button>
+                    <Button small={true} onClick={() => window.open("mailto:admin@kirakissu.com", "_blank")}>
+                      <Image src={email} alt="email" width={20} height={20} />
+                    </Button>
                   </div>
                 </div>
-              </Window>
+              </HeaderBox>
             </div>
 
             <div className={styles.spanFull}>
