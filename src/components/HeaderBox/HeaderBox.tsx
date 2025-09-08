@@ -6,10 +6,10 @@ import bowbackground from "@/assets/images/backgrounds/bows.jpg";
 
 export interface IHeaderBoxProps {
     header: string;
-    subtitle: string;
-    subtitle2: string;
+    subtitle?: string;
+    subtitle2?: string;
     showFlashy: boolean;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export const HeaderBox = ({header, subtitle, subtitle2, showFlashy = false, children}: IHeaderBoxProps) => {

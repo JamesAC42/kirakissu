@@ -374,9 +374,7 @@ export default function Home() {
         </div>
 
         <div className={`stickyRight`}>
-          <Window header="quick links">
-            <VerticalNav />
-          </Window>
+          <VerticalNav />
           <Window header="calendar" showButtons={true}>
             <div className={`windowContent`}>
               <Calendar />

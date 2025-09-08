@@ -34,8 +34,8 @@
             height:auto;
         }
     }
-
 }
+
 .headerTitle {
     font-family: var(--font-checkpoint);
     font-size: 4rem;
@@ -44,7 +44,8 @@
 }
 
 .headerSubtitle {
-    margin-top: 0.5rem;
+    margin:0;
+    margin-top: 1rem;
     font-size: 1.2rem;
 
     .headerSubtitleText {
@@ -58,6 +59,7 @@
         font-weight: 700;
         font-size:1rem;
         color:#ff8cb6;
+        margin-top:0.5rem;
     }
 }
 
