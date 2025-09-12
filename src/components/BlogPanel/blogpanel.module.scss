@@ -99,10 +99,16 @@
                     color:#ff8cb4;
                     font-family: var(--font-pixel-mix);
                     margin-bottom:0.5rem;
+                    .blogTitle {
+                        max-width:20rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                     .blogTags {
-                        margin-left:1rem;
+                        margin-left:0.5rem;
                         display:flex;
-                        gap:0.5rem;
+                        gap:0.1rem;
                         align-items:center;
                         .blogTag {
                             margin-top:0.25rem;

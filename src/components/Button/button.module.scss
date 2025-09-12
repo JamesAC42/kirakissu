@@ -64,4 +64,17 @@
             }
         }
     }
+
+    &.disabled {
+        cursor: var(--default-cursor-url), auto;
+        opacity:0.5;
+        &.pressed {
+            outline: none;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #f8c6da;
+            border-bottom: 2px solid #f8c6da;
+            box-shadow: 1px 1px 0 1px #524242;
+        }
+    }
 }

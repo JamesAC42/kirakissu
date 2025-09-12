@@ -1,0 +1,36 @@
+.tableScroll {
+    overflow-x: auto;
+}
+
+.coverUploadRow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.uploadButtonLabel {
+    display: inline-block;
+    text-align: center;
+    padding: 0.4rem 0.8rem;
+}
+
+.hiddenFileInput {
+    display: none;
+}
+
+.previewToggleRow {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.markdownEditorTextarea {
+    min-height: 20rem;
+    height:50rem;
+}
+
+.markdownPreviewWindow {
+    padding: 1rem;
+}

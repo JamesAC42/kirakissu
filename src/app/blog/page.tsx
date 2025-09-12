@@ -6,7 +6,8 @@ import HeaderBox from "@/components/HeaderBox/HeaderBox";
 import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
 import { Window } from "@/components/Window/Window";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState, useRef } from "react";
 
 import magnifyingglass from "@/assets/images/icons/magnifyingglass.png";
 
@@ -16,44 +17,45 @@ import magazine3 from "@/assets/images/blog/magazine cover 3.jpg";
 
 import calendar from "@/assets/images/icons/calendar.png";
 import eye from "@/assets/images/icons/eye.png";
-import heart from "@/assets/images/icons/heart.png";
-import comment from "@/assets/images/icons/comment.png";
-import time from "@/assets/images/icons/time.png";
+// removed unused icons
 
 import kumabubble from "@/assets/images/blog/kumabubble.png";
 
-const PostItem = () => {
+type SortOption = "newest" | "oldest" | "popular" | "liked";
 
-    const thumbnail = [magazine, magazine2, magazine3][Math.floor(Math.random() * 3)];
+type BlogListItem = { id: string; slug: string; title: string; excerpt?: string | null; tags: string[]; coverImage?: string | null; publishedAt?: string | null; isFeatured?: boolean | null; views?: number; likes?: number };
 
+const PostItem = ({ item, onClick, featured }: { item: BlogListItem; onClick: () => void; featured: boolean }) => {
+    const thumbnail = item.coverImage || [magazine.src, magazine2.src, magazine3.src][Math.floor(Math.random() * 3)];
     return (
-        <div className={`${styles.post} windowStyle`}>
+        <div className={`${styles.post} windowStyle ${featured ? styles.mainFeaturedPost : ""}`} onClick={onClick}>
             <div className={styles.postImage}>
                 <Image src={thumbnail} alt="featured post" width={450} height={610} />
             </div>
             <div className={styles.postContent}>
-                <h3>Featured Post Title Here</h3>
-                <h4>Subtitle is here</h4>
+                <h3>{item.title}</h3>
+                {item.excerpt && <h4>{item.excerpt}</h4>}
                 <div className={styles.postDate}>
                     <Image src={calendar} alt="calendar" width={16} height={16} />
-                    <span> October 1, 2024</span>
+                    <span>{item.publishedAt ? new Date(item.publishedAt).toLocaleDateString() : ""}</span>
                 </div>
-                <div className={styles.postTime}>
-                    <Image src={time} alt="time" width={16} height={16} />
-                    <span>4 min. read</span>
-                </div>
+                
+                {(typeof item.views === "number" || typeof item.likes === "number") && (
                 <div className={styles.postDetails}>
-                    <Image src={eye} alt="eye" width={16} height={16} />
-                    <span>8</span>
-                    <Image src={heart} alt="heart" width={16} height={16} />
-                    <span>2</span>
-                    <Image src={comment} alt="comment" width={16} height={16} />
-                    <span>2</span>
-                </div>
+                    {typeof item.views === "number" && (
+                    <div className={styles.postViews}>
+                        <Image src={eye} alt="eye" width={16} height={16} />
+                        <span>{item.views} {item.views === 1 ? "view" : "views"}</span>
+                    </div>)}
+                    {typeof item.likes === "number" && (
+                    <div className={styles.postLikes}>
+                        <span>❤ {item.likes}</span>
+                    </div>)}
+                </div>)}
                 <div className={styles.postTags}>
-                    <div className={styles.postTag}>Music</div>
-                    <div className={styles.postTag}>Art</div>
-                    <div className={styles.postTag}>Life</div>
+                    {(item.tags || []).slice(0, 5).map((t) => (
+                        <div className={styles.postTag} key={t}>{t}</div>
+                    ))}
                 </div>
             </div>
         </div>
@@ -63,6 +65,94 @@ const PostItem = () => {
 export default function Blog() {
 
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const [search, setSearch] = useState("");
+    const initialTags = (() => {
+        const t = searchParams.get("tags") || "";
+        return Array.from(new Set(t.split(",").map((s) => s.trim()).filter(Boolean)));
+    })();
+    const [activeTags, setActiveTags] = useState<string[]>(initialTags);
+    const [sort, setSort] = useState<SortOption>("newest");
+    const [page, setPage] = useState(1);
+    const pageSize = 9;
+    const [featured, setFeatured] = useState<BlogListItem | null>(null);
+    const [items, setItems] = useState<BlogListItem[]>([]);
+    const [total, setTotal] = useState(0);
+
+    const queryString = useMemo(() => {
+        const params = new URLSearchParams();
+        if (search.trim()) params.set("search", search.trim());
+        if (activeTags.length) params.set("tags", activeTags.join(","));
+        if (sort) params.set("sort", sort);
+        params.set("page", String(page));
+        params.set("pageSize", String(pageSize));
+        return params.toString();
+    }, [search, activeTags, sort, page]);
+
+    const tagsQuery = searchParams.get("tags") || "";
+    const searchQuery = searchParams.get("search") || "";
+    const sortQuery = (searchParams.get("sort") as SortOption) || "newest";
+    const pageQuery = Number(searchParams.get("page") || 1) || 1;
+    useEffect(() => {
+        // Sync state from URL
+        const parsedTags = Array.from(new Set(tagsQuery.split(",").map((s) => s.trim()).filter(Boolean)));
+        const sameTags = parsedTags.length === activeTags.length && parsedTags.every((t) => activeTags.includes(t));
+        if (!sameTags) setActiveTags(parsedTags);
+        if (search !== searchQuery) setSearch(searchQuery);
+        if (sort !== sortQuery) setSort(sortQuery);
+        if (page !== pageQuery) setPage(Math.max(1, pageQuery));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tagsQuery, searchQuery, sortQuery, pageQuery]);
+
+    const fetchedFeaturedRef = useRef(false);
+    useEffect(() => {
+        if (fetchedFeaturedRef.current) return;
+        fetchedFeaturedRef.current = true;
+        (async () => {
+            const rf = await fetch(`/api/blog/posts?featured=1&page=1&pageSize=1`, { cache: "no-store" });
+            if (rf.ok) {
+                const jf = await rf.json();
+                setFeatured(jf.items?.[0] ?? null);
+            }
+        })();
+    }, []);
+
+    const lastQueryRef = useRef<string>("");
+    useEffect(() => {
+        if (lastQueryRef.current === queryString) return;
+        lastQueryRef.current = queryString;
+        (async () => {
+            const r = await fetch(`/api/blog/posts?${queryString}`, { cache: "no-store" });
+            if (r.ok) {
+                const j = await r.json();
+                setItems(j.items || []);
+                setTotal(j.total || 0);
+            }
+        })();
+    }, [queryString]);
+
+    // Push current filters to URL when user changes state
+    const pushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pushQueryToUrl = (next?: Partial<{ search: string; activeTags: string[]; sort: SortOption; page: number }>) => {
+        const q = new URLSearchParams();
+        const s = (next?.search ?? search).trim();
+        const t = next?.activeTags ?? activeTags;
+        const so = next?.sort ?? sort;
+        const p = next?.page ?? page;
+        if (s) q.set("search", s);
+        if (t.length) q.set("tags", t.join(","));
+        if (so) q.set("sort", so);
+        q.set("page", String(p));
+        q.set("pageSize", String(pageSize));
+        const qs = q.toString();
+        const url = qs ? `/blog?${qs}` : "/blog";
+        if (pushTimerRef.current) clearTimeout(pushTimerRef.current);
+        pushTimerRef.current = setTimeout(() => {
+            router.push(url);
+        }, 0);
+    };
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
     return (
         <PageWrapper>
             <HeaderBox header="Blog" subtitle2="Articles and ramblings on music, art, life, and other random things!" showFlashy={false}/>
@@ -75,40 +165,17 @@ export default function Blog() {
                         </div>
                     </Window>
                     <div className={styles.featuredPostsList}>
-                        <div
-                            onClick={() => {
-                                router.push("/blog/article-title");
-                            }}
-                            className={`${styles.post} windowStyle ${styles.mainFeaturedPost}`}>
-                            <div className={styles.postImage}>
-                                <Image src={magazine} alt="featured post" width={450} height={610} />
-                            </div>
-                            <div className={styles.postContent}>
-                                <h3>How I Learned to Stop Worrying and Love the Pixel Art</h3>
-                                <h4>Subtitle is here</h4>
-                                <div className={styles.postDate}>
-                                    <p>October 1, 2024</p>
-                                </div>
-                                <div className={styles.postDate}>
-                                    <p>4 min. read</p>
-                                </div>
-                                <div className={styles.postDate}>
-                                    <span>8 views</span>
-                                    <span>2 likes</span>
-                                </div>
-                                <div className={styles.postTags}>
-                                    <div className={styles.postTag}>Music</div>
-                                    <div className={styles.postTag}>Art</div>
-                                    <div className={styles.postTag}>Life</div>
-                                </div>
-                            </div>
+                        {featured && (
+                            <PostItem item={featured} featured={true} onClick={() => router.push(`/blog/${featured.slug}`)} />
+                        )}
+                        <div className={styles.kumabubbleContainer}>
+                            <Image src={kumabubble} alt="kumabubble" width={500} height={500} className={styles.kumabubble} />
                         </div>
-                        <Image src={kumabubble} alt="kumabubble" width={500} height={500} className={styles.kumabubble} />
                     </div>
                 </div>
                 <div className={styles.filterOuter}>
                     <div className={styles.searchContainer}>
-                        <input type="text" placeholder="Search..." />
+                        <input type="text" placeholder="Search..." value={search} onChange={(e) => { const v = e.target.value; setSearch(v); pushQueryToUrl({ search: v, page: 1 }); }} />
                         <div className={styles.searchIconContainer}>
                             <Image
                                 className={styles.searchIcon}
@@ -119,19 +186,26 @@ export default function Blog() {
                         </div>
                     </div>
                     <div className={styles.tagsContainer}>
-                        <div className={styles.tag}>All</div>
-                        <div className={`${styles.tag} ${styles.activeTag}`}>Music</div>
-                        <div className={styles.tag}>Art</div>
-                        <div className={styles.tag}>Life</div>
-                        <div className={styles.tag}>Gaming</div>
-                        <div className={styles.tag}>Cooking</div>
-                        <div className={styles.tag}>Health & Beauty</div>
+                        {(["All", "Music", "Art", "Life", "Gyaru", "Language", "Gaming", "Cooking", "Health", "Beauty", "Fashion"]).map((t) => {
+                            const isAll = t === "All";
+                            const active = isAll ? activeTags.length === 0 : activeTags.includes(t);
+                            return (
+                                <div key={t} className={`${styles.tag} ${active ? styles.activeTag : ""}`}
+                                    onClick={() => {
+                                        const prev = activeTags;
+                                        const next = isAll ? [] : (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
+                                        pushQueryToUrl({ activeTags: next, page: 1 });
+                                    }}
+                                >{t}</div>
+                            );
+                        })}
                     </div>
                     <div className={styles.sortContainer}>
                         <div className={styles.sortTitle}>Sort:</div>
-                        <Button text="Newest" onClick={() => {}} />
-                        <Button text="Oldest" onClick={() => {}} />
-                        <Button text="Popular" onClick={() => {}} />
+                        <Button text="Newest" onClick={() => { pushQueryToUrl({ sort: "newest", page: 1 }); }} />
+                        <Button text="Oldest" onClick={() => { pushQueryToUrl({ sort: "oldest", page: 1 }); }} />
+                        <Button text="Popular" onClick={() => { pushQueryToUrl({ sort: "popular", page: 1 }); }} />
+                        <Button text="Liked" onClick={() => { pushQueryToUrl({ sort: "liked", page: 1 }); }} />
                     </div>
                 </div>
             </div>
@@ -139,28 +213,18 @@ export default function Blog() {
                 <Window>
                     <div className={styles.blogPostsTitle}>
                         <h2>Blog Posts</h2>
-                        <h4>Category: All | Sort: Newest</h4>
+                        <h4>Category: {activeTags.length ? activeTags.join(", ") : "All"} | Sort: {sort[0].toUpperCase() + sort.slice(1)}</h4>
                     </div>
                 </Window>
                 <div className={styles.blogPosts}>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
+                    {items.map((it) => (
+                        <PostItem key={it.id} featured={false} item={it} onClick={() => router.push(`/blog/${it.slug}`)} />
+                    ))}
                 </div>
                 <div className={styles.pagination}>
-                    <Button text="< Previous" onClick={() => {}} />
-                    <Button text="1" onClick={() => {}} />
-                    <Button text="2" onClick={() => {}} />
-                    <Button text="3" onClick={() => {}} />
-                    <Button text="4" onClick={() => {}} />
-                    <Button text="5" onClick={() => {}} />
-                    <Button text="Next >" onClick={() => {}} />
+                    <Button text="< Previous" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} />
+                    <span style={{ margin: "0 0.5rem" }}>{page} / {totalPages}</span>
+                    <Button text="Next >" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} />
                 </div>
             </div>
         </PageWrapper>

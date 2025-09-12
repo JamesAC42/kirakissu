@@ -17,7 +17,7 @@ export const VerticalNav = () => {
                 <div className={`${styles.verticalNav}`}>
                     <Button text="Home" onClick={() => router.push("/")} active={pathname === "/"} />
                     <Button text="About Me" onClick={() => router.push("/aboutme")} active={pathname === "/aboutme"} />
-                    <Button text="Blog" onClick={() => router.push("/blog")} active={pathname === "/blog"} />
+                    <Button text="Blog" onClick={() => router.push("/blog")} active={pathname.startsWith("/blog")} />
                     <Button text="Diary" onClick={() => router.push("/diary")} active={pathname === "/diary"} />
                     <Button text="Scrapbook" onClick={() => router.push("/scrapbook")} active={pathname === "/scrapbook"} />
                     <Button text="Guestbook" onClick={() => router.push("/guestbook")} active={pathname === "/guestbook"} /> 

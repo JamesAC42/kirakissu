@@ -39,7 +39,8 @@ export default function RootLayout({
   const fontClasses = fonts.map((f) => f.variable).join(" ");
   return (
     <html lang="en" className={fontClasses}>
-      <body>
+      <body>  
+        <script defer src="https://umami.ovel.sh/script.js" data-website-id="2ee8b458-39d7-4cc4-ae04-a92b42124cbb"></script>
         {children}
       </body>
     </html>

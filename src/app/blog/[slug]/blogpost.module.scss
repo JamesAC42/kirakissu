@@ -1,5 +1,59 @@
+@keyframes expandOutline {
+    0% {
+        width:calc(100% + 8px);
+        transform:translate(calc(-50%), -50%) scale(0.8);
+        border-color:#ffd8ed;
+    }
+    100% {
+        width:calc(100% + 22px);
+        transform:translate(calc(-50%), -50%) scale(1);
+        border-color:#7d3de4;
+    }
+}
+
 .postDetailsContainer {
     margin-top:1rem;
+
+    .backToAllPosts {
+        display:block;
+        width:fit-content;
+        margin-top:1rem;
+        a {
+            position:relative;
+            display:block;
+            width:fit-content;
+            color:#7d3de4;
+            text-decoration:none;
+            display:flex;
+            align-items:center;
+            gap:0.2rem;
+            cursor: var(--pointer-cursor-url), auto;
+            img {
+                width:16px;
+            }
+        }
+
+        &:hover {
+
+            a::after {
+                content:"";
+                position:absolute;
+                top:50%;
+                left:50%;
+                height:calc(100% + 5px);
+                width:calc(100% + 22px);
+                border-radius:3px;
+                transform:translate(calc(-50%), -50%);
+                outline: 1px solid #7d3de4;
+                animation: expandOutline 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            a img {
+                transition:all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                //transform:translateX(-5px);
+            }
+        }
+    }
 
     .postDetails {
         margin-top:0.2rem;
@@ -42,6 +96,142 @@
             box-shadow: 2px 2px 0 0px #e792ff;
             transform:translate(-2px, -2px);
             transition:all 0.1s ease-in-out;
+        }
+
+        &.liked {
+            background:#ff71ac;
+            cursor: var(--default-cursor-url), auto;
+            &:hover {
+                box-shadow:none;
+                transform:none;
+            }
+        }
+    }
+}
+
+@mixin inputarea {
+    padding:0.5rem;
+    border:1px solid #6c585f;
+    border-radius:4px;
+    font-size:1rem;
+    font-family: var(--font-nunito);
+
+    &:focus {
+        outline:2px solid #ffbee5;
+    }
+}
+
+.commentsOuter {
+
+    .commentsFormOuter {
+        display:flex;
+        padding-bottom:1rem;
+        margin-top:2rem;
+
+        .commentsFormHeader {
+            width:10rem;
+            padding:0.5rem;
+            margin-left:1rem;
+            h3 {
+                margin:0;
+            }
+        }
+
+        .commentsForm {
+            display:flex;
+            flex-direction:column;
+            gap:0.5rem;
+            flex:1;
+            margin-left:1rem;
+            padding:0rem;
+            label {
+                font-size:0.9rem;
+                color:#6c585f;
+                margin-top:0.5rem;
+            }
+            input, textarea {
+                width:calc(100% - 1rem);
+                @include inputarea;
+            }
+            textarea {
+                height:10rem;
+            }
+            .commentsFormButton {
+                display:flex;
+                margin-top:1rem;
+                gap:0.5rem;
+                justify-content:space-between;
+            }
+        }
+        .commentsFormImage {
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            img {
+                width:12rem;
+                height:auto;
+            }
+        }
+    }
+
+    .commentsList {
+        margin-top:1rem;
+
+        .comment {
+            margin:1rem;
+            padding:1rem;
+
+            border:1px solid #ffcdfa;
+
+            .commentMeta {
+                display:flex;
+                gap:1rem;
+                .commentName {
+                    font-weight:700;
+                }
+            }
+            
+            .commentReplyLabel {
+                font-weight:700;
+            }
+
+            .commentActions {
+                display:flex;
+                gap:0.5rem;
+                margin-top:1rem;
+            }
+
+            .commentReplyForm {
+                textarea {
+                    @include inputarea;
+                    width:calc(100% - 1rem);
+                    margin-bottom:0.5rem;
+                }
+            }
+
+            .commentReply {
+                margin:1rem 0;
+                margin-bottom:0;
+
+                background:#ffe3f1;
+                border:1px solid #db2c7d;
+
+                .commentMeta {
+                    gap:0.3rem;
+                    color:#db2c7d;
+                    .commentName {
+                        font-weight:400;
+                    }
+                }
+            
+                .commentReplyLabel {
+                    font-weight:400;
+                }
+
+                .commentActions {
+                    margin-bottom:0;
+                }
+            }
         }
     }
 }

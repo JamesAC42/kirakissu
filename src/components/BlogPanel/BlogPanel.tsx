@@ -2,6 +2,7 @@ import styles from "./blogpanel.module.scss";
 import { Button } from "../Button/Button";
 import { Window } from "../Window/Window";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import sheep from "@/assets/images/homepage/sheep.gif";
 import sailormoonstamp from "@/assets/images/stamps/sailormoon.png";
 
@@ -19,19 +20,29 @@ export interface IBlogPanelProps {
 }
 
 export const BlogPanel = (props: IBlogPanelProps) => {
+    const router = useRouter();
+    const goToTag = (tag: string) => {
+        const q = new URLSearchParams({ tags: tag });
+        router.push(`/blog?${q.toString()}`);
+    };
+    const goToPost = (id: string) => {
+        router.push(`/blog/${encodeURIComponent(id)}`);
+    };
+
+    // console.log(props);
 
     return (
         <div className={`windowContent ${styles.blogPostContainer} scrollArea`}>
             <div className={styles.blogInfo}>
                 <div className={styles.blogCategories}>
-                    <Button text="music" onClick={() => {}} />
-                    <Button text="art" onClick={() => {}} />
-                    <Button text="life" onClick={() => {}} />
-                    <Button text="gaming" onClick={() => {}} />
-                    <Button text="cooking" onClick={() => {}} />
-                    <Button text="health & beauty" onClick={() => {}} />
-                    <Button text="fashion" onClick={() => {}} />
-                    <Button text="music" onClick={() => {}} />
+                    <Button text="music" onClick={() => goToTag("Music")} />
+                    <Button text="art" onClick={() => goToTag("Art")} />
+                    <Button text="life" onClick={() => goToTag("Life")} />
+                    <Button text="gaming" onClick={() => goToTag("Gaming")} />
+                    <Button text="cooking" onClick={() => goToTag("Cooking")} />
+                    <Button text="health" onClick={() => goToTag("Health")} />
+                    <Button text="beauty" onClick={() => goToTag("Beauty")} />
+                    <Button text="fashion" onClick={() => goToTag("Fashion")} />
                 </div>
 
                 <div className={styles.sheepContainer}>
@@ -49,14 +60,24 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                         <h2>recent posts</h2>
                     </div>
 
-                    {
-                        props.recentPosts.length > 0 && props.recentPosts.map((post) => (
-                        <div className={styles.blogItem} key={post.id}>
-                            <h3>{post.title} <span className={styles.blogTags}><span className={styles.blogTag}>{post.tags[0]}</span><span className={styles.blogTag}>{post.tags[1]}</span></span></h3>
-                            <div className={styles.blogDate}>{post.date}</div>
-                            <p>{post.content}</p>
-                        </div>
-                    ))}
+                    {props.recentPosts.length > 0 && props.recentPosts.map((post) => {
+                        const preview = (post.content || "").trim();
+                        const short = preview.length > 180 ? `${preview.slice(0, 180)}…` : preview;
+                        return (
+                            <div className={styles.blogItem} key={post.id} onClick={() => goToPost(post.id)}>
+                                <h3>
+                                    <span className={styles.blogTitle}>{post.title}</span>
+                                    <span className={styles.blogTags}>
+                                        {(post.tags || []).slice(0, 5).map((t) => (
+                                            <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
+                                        ))}
+                                    </span>
+                                </h3>
+                                <div className={styles.blogDate}>{post.date}</div>
+                                <p>{short}</p>
+                            </div>
+                        );
+                    })}
 
                     {
                         props.recentPosts.length === 0 && (
@@ -71,14 +92,24 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                         <h2>popular posts</h2>
                     </div>
                     
-                    {
-                        props.popularPosts.length > 0 && props.popularPosts.map((post) => (
-                        <div className={styles.blogItem} key={post.id}>
-                            <h3>{post.title} <span className={styles.blogTags}><span className={styles.blogTag}>{post.tags[0]}</span><span className={styles.blogTag}>{post.tags[1]}</span></span></h3>
-                            <div className={styles.blogDate}>{post.date}</div>
-                            <p>{post.content}</p>
-                        </div>
-                    ))}
+                    {props.popularPosts.length > 0 && props.popularPosts.map((post) => {
+                        const preview = (post.content || "").trim();
+                        const short = preview.length > 180 ? `${preview.slice(0, 180)}…` : preview;
+                        return (
+                            <div className={styles.blogItem} key={post.id} onClick={() => goToPost(post.id)}>
+                                <h3>
+                                    <span className={styles.blogTitle}>{post.title}</span>
+                                    <span className={styles.blogTags}>
+                                        {(post.tags || []).slice(0, 5).map((t) => (
+                                            <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
+                                        ))}
+                                    </span>
+                                </h3>
+                                <div className={styles.blogDate}>{post.date}</div>
+                                <p>{short}</p>
+                            </div>
+                        );
+                    })}
 
                     {
                         props.popularPosts.length === 0 && (
