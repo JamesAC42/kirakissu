@@ -27,8 +27,84 @@
     }
 }
 
-.viewMore {
+.actions {
     display:flex;
     justify-content:center;
-    margin-top:2rem;
+    margin-top:0.5rem;
+    gap:1rem;
+
+    img {
+        transform:translateY(2px);
+    }
+}
+
+@keyframes backandforth {
+    0% {
+        transform:perspective(100px) translateZ(-100px) rotateY(5deg);
+        opacity:0.5;
+    }
+    100% {
+        transform:perspective(100px) translateZ(10px);
+        opacity:1;
+    }
+}
+
+.scrollablePane {
+    width:100%;
+    position:relative;
+    border:1px solid #ff8cb6;
+    overflow:hidden;
+    background:#fff8fb;
+    height:30rem;
+
+    &::before,
+    &::after {
+        content:"";
+        position:absolute;
+        height:100%;
+        width:10rem;
+        left:0;
+        top:0;
+        transform:translate(-100%, 0);
+        box-shadow: 2rem 0rem 10rem 2rem rgba(242, 129, 159, 0.733);
+    }
+
+    &::after {
+        left:auto;
+        right:0;
+        box-shadow: -2rem 0rem 10rem 2rem rgba(242, 129, 159, 0.733);
+        transform:translate(100%, 0);
+    }
+    
+    .scrollablePaneInner {
+        display:flex;
+        flex-direction:row;
+        gap:1rem;
+        padding:1rem;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        .galleryPreviewItem {
+            width:15.625rem;
+            max-height:30rem;
+            user-select: none;
+            //transition:transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            //animation: backandforth 1s infinite alternate;
+
+            .galleryItemInner {
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                
+                p {
+                    text-align:center;
+                    user-select: none;
+                    padding:0.5rem;
+                }
+            }
+        }
+    }
 }
