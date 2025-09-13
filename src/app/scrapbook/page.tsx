@@ -3,16 +3,138 @@
 import HeaderBox from "@/components/HeaderBox/HeaderBox";
 import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
 import { useEffect, useMemo, useState } from "react";
-import { Window } from "@/components/Window/Window";
+// import { Window } from "@/components/Window/Window";
+import Image from "next/image";
+import { Button } from "@/components/Button/Button";
+import styles from "./scrapbook.module.scss";
+
+import book from "@/assets/images/icons/book.png";
+import open from "@/assets/images/icons/open.png";
+
+type ScrapbookItem = { id: string; imageUrl: string; caption: string; takenAt?: string | null; album?: string | null; tags?: string[] };
+
+function computeTiltClass(item: ScrapbookItem): string {
+    const key = (item.id || item.imageUrl || "");
+    let hash = 5381;
+    for (let i = 0; i < key.length; i++) {
+        hash = ((hash << 5) + hash) + key.charCodeAt(i);
+        hash |= 0;
+    }
+    const n = Math.abs(hash) % 7; // 0..6
+    return `tilt${n}`;
+}
+
+function PolaroidCard({ item, index, focused, onClick }: {
+    item: ScrapbookItem;
+    index: number;
+    focused: boolean;
+    onClick: (e: React.MouseEvent<HTMLDivElement>, item: ScrapbookItem, index?: number) => void;
+}) {
+
+
+    const handleOpen = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        window.open(item.imageUrl, '_blank');
+    };
+
+    return (
+        <div
+            className={`${styles.polaroid} ${styles[computeTiltClass(item)]} ${focused ? styles.polaroidFocused : ""}`}
+            onClick={(e) => onClick(e, item, index)}
+            style={{ "--delay": `${index * 0.1}s` } as React.CSSProperties}
+        >
+            <Image src={item.imageUrl} alt={item.caption} className={styles.polaroidImage} width={800} height={600} />
+            <div className={`${styles.polaroidCaption}`}>
+                <div className={styles.cardTitle}>{item.caption}</div>
+                <div className={styles.cardDate}>{item.takenAt ? new Date(item.takenAt).toLocaleDateString() : ""}</div>
+                <div className={styles.tagsRow}>
+                    {(Array.isArray(item.tags) ? item.tags : []).map(t => (
+                        <span key={t} className={styles.tagChip}>{t}</span>
+                    ))}
+                </div>
+            </div>
+            {
+                focused && (
+                    <div 
+                        className={styles.polaroidOpen}
+                        onClick={(e) => handleOpen(e)}
+                        >
+                        <Image src={open} alt="Open" />
+                    </div>
+                )
+            }
+        </div>
+    );
+}
+
+function PolaroidList({ items, focusedId, onCardClick }: {
+    items: ScrapbookItem[];
+    focusedId: string | null;
+    onCardClick: (e: React.MouseEvent<HTMLDivElement>, item: ScrapbookItem, index?: number) => void;
+}) {
+    return (
+        <>
+            {items.map((it, idx) => (
+                <PolaroidCard key={it.id} item={it} index={idx} focused={focusedId === it.id} onClick={onCardClick} />
+            ))}
+        </>
+    );
+}
+
+function PaginationControls({ page, total, onPrev, onNext }: {
+    page: number;
+    total?: number;
+    onPrev: () => void;
+    onNext: () => void;
+}) {
+    const totalPages = total != null ? Math.max(1, Math.ceil(total / 12)) : undefined;
+    return (
+        <div className={styles.paginationBar}>
+            <div className={styles.buttonRow}>
+                <Button small onClick={onPrev} disabled={page <= 1}>{"< Prev"}</Button>
+                {totalPages != null ? (
+                    <span>Page {page} / {totalPages}</span>
+                ) : (
+                    <span>Page {page}</span>
+                )}
+                <Button small onClick={onNext} disabled={totalPages != null ? page >= totalPages : false}>{"Next >"}</Button>
+            </div>
+        </div>
+    );
+}
 
 export default function Scrapbook() {
-    const [items, setItems] = useState<Array<{ id: string; imageUrl: string; caption: string; takenAt?: string | null; album?: string | null; tags?: string[] }>>([]);
+    const [items, setItems] = useState<Array<ScrapbookItem>>([]);
     const [album, setAlbum] = useState<string>("");
     const [tagFilter, setTagFilter] = useState<string>("");
     const [page, setPage] = useState<number>(1);
     const [total, setTotal] = useState<number>(0);
+    const [focusedId, setFocusedId] = useState<string | null>(null);
+    const [gridClass, setGridClass] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, item: ScrapbookItem) => {
+        if (focusedId === item.id) {
+            setFocusedId(null);
+            setGridClass("");
+            return;
+        }
+        const card = (e.currentTarget as HTMLDivElement);
+        const rect = card.getBoundingClientRect();
+        const viewportCenterX = window.innerWidth / 2;
+        const viewportCenterY = window.innerHeight / 2;
+        const cardCenterX = rect.left + rect.width / 2;
+        const cardCenterY = rect.top + rect.height / 2;
+        const dx = viewportCenterX - cardCenterX;
+        const dy = viewportCenterY - cardCenterY;
+        card.style.setProperty("--dx", `${dx}px`);
+        card.style.setProperty("--dy", `${dy}px`);
+        setFocusedId(item.id);
+        setGridClass(styles.gridDim);
+    };
 
     useEffect(() => {
+        setLoading(true);
         (async () => {
             // If tag filter is active, ignore album and paginate across entire table client-side
             if (tagFilter.trim()) {
@@ -23,9 +145,9 @@ export default function Scrapbook() {
                 if (r.ok) {
                     const j = await r.json();
                     const tags = tagFilter.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
-                    const filtered = (j.items || []).filter((it: any) => {
-                        const its = Array.isArray(it.tags) ? (it.tags as string[]).map(s => s.toLowerCase()) : [];
-                        // any-match
+                    const allItems = (j.items || []) as ScrapbookItem[];
+                    const filtered = allItems.filter((it) => {
+                        const its = Array.isArray(it.tags) ? it.tags.map(s => s.toLowerCase()) : [];
                         return tags.length === 0 ? true : tags.some(t => its.includes(t));
                     });
                     const start = (page - 1) * 12;
@@ -33,6 +155,7 @@ export default function Scrapbook() {
                     setItems(filtered.slice(start, end));
                     setTotal(filtered.length);
                 }
+                setLoading(false);
                 return;
             }
 
@@ -43,6 +166,7 @@ export default function Scrapbook() {
                 params.set("page", String(page));
                 params.set("pageSize", String(12));
                 const r = await fetch(`/api/scrapbook?${params.toString()}`, { cache: "no-store" });
+                setLoading(false);
                 if (r.ok) { const j = await r.json(); setItems(j.items || []); setTotal(j.total || 0); }
             } else {
                 const params = new URLSearchParams();
@@ -54,6 +178,7 @@ export default function Scrapbook() {
                     setItems(j.items || []);
                     setTotal(j.total || 0);
                 }
+                setLoading(false);
             }
         })();
     }, [album, tagFilter, page]);
@@ -73,88 +198,43 @@ export default function Scrapbook() {
         return Array.from(set).sort();
     }, [items]);
 
-    const allTags = useMemo(() => {
-        const set = new Set<string>();
-        for (const it of items) {
-            const tags = Array.isArray(it.tags) ? it.tags : [];
-            for (const t of tags) set.add(t);
-        }
-        return Array.from(set).sort();
-    }, [items]);
+    // Tags list can be computed if needed later
 
     return (
         <PageWrapper>
             <HeaderBox header="Scrapbook" subtitle2="My scrapbook of memories." showFlashy={false}/>
-            <div className="windowStyle" style={{ padding: "1rem", marginBottom: "1rem" }}>
-                <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
-                    <label>
-                        Album:
-                        <select value={album} onChange={(e) => { setAlbum(e.target.value); setPage(1); }} style={{ marginLeft: "0.5rem" }}>
+            <div className={`windowStyle ${styles.filterBar}`}>
+                <div className={styles.filterRow}>
+                    <label className={styles.filterLabel}>
+                        <span>Album:</span>
+                        <select value={album} onChange={(e) => { setAlbum(e.target.value); setPage(1); }} className={`${styles.select}`}>
                             <option value="">All</option>
                             {allAlbums.map(a => (
                                 <option key={a} value={a}>{a}</option>
                             ))}
                         </select>
                     </label>
-                    <label>
-                        Tags (comma-separated):
-                        <input value={tagFilter} onChange={(e) => { setTagFilter(e.target.value); setPage(1); }} style={{ marginLeft: "0.5rem" }} placeholder="e.g. travel, food" />
+                    <label className={styles.filterLabel}>
+                        <span>Tags (comma-separated):</span>
+                        <input value={tagFilter} onChange={(e) => { setTagFilter(e.target.value); setPage(1); }} className={`${styles.input}`} placeholder="e.g. travel, food" />
                     </label>
                 </div>
             </div>
             {tagFilter.trim() && (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(16rem, 1fr))", gap: "1rem" }}>
-                    {items.map((it) => (
-                        <Window key={it.id}>
-                            <div className="windowContent">
-                                <img src={it.imageUrl} alt={it.caption} style={{ width: "100%", height: "16rem", objectFit: "cover" }} />
-                                <div style={{ padding: "0.5rem" }}>
-                                    <div style={{ fontWeight: 600 }}>{it.caption}</div>
-                                    <div style={{ fontSize: "0.85rem", opacity: 0.7 }}>{it.takenAt ? new Date(it.takenAt).toLocaleDateString() : ""}</div>
-                                    <div style={{ marginTop: "0.5rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                                        {(Array.isArray(it.tags) ? it.tags : []).map(t => (
-                                            <span key={t} style={{ border: "1px solid #ff8cb6", padding: "0.25rem 0.5rem", borderRadius: "0.25rem", fontSize: "0.8rem" }}>{t}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </Window>
-                    ))}
+                <div className={`${styles.grid} ${gridClass}`}>
+                    <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
                 </div>
             )}
             {tagFilter.trim() && (
-                <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
-                    <button className="buttonSecondary" onClick={() => setPage(Math.max(1, page - 1))}>{"< Prev"}</button>
-                    <span>Page {page} / {Math.max(1, Math.ceil(total / 12))}</span>
-                    <button className="buttonSecondary" onClick={() => setPage(page + 1)}>{"Next >"}</button>
-                </div>
+                <PaginationControls page={page} total={total} onPrev={() => setPage(Math.max(1, page - 1))} onNext={() => setPage(page + 1)} />
             )}
 
             {!tagFilter.trim() && album && (
                 <>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(16rem, 1fr))", gap: "1rem", marginTop: "1rem" }}>
-                        {items.map((it) => (
-                            <Window key={it.id}>
-                                <div className="windowContent">
-                                    <img src={it.imageUrl} alt={it.caption} style={{ width: "100%", height: "16rem", objectFit: "cover" }} />
-                                    <div style={{ padding: "0.5rem" }}>
-                                        <div style={{ fontWeight: 600 }}>{it.caption}</div>
-                                        <div style={{ fontSize: "0.85rem", opacity: 0.7 }}>{it.takenAt ? new Date(it.takenAt).toLocaleDateString() : ""}</div>
-                                        <div style={{ marginTop: "0.5rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                                            {(Array.isArray(it.tags) ? it.tags : []).map(t => (
-                                                <span key={t} style={{ border: "1px solid #ff8cb6", padding: "0.25rem 0.5rem", borderRadius: "0.25rem", fontSize: "0.8rem" }}>{t}</span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </Window>
-                        ))}
+                    <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
+                        <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
                     </div>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
-                        <button className="buttonSecondary" onClick={() => setPage(Math.max(1, page - 1))}>{"< Prev"}</button>
-                        <span>Page {page}</span>
-                        <button className="buttonSecondary" onClick={() => setPage(page + 1)}>{"Next >"}</button>
-                    </div>
+                    <PaginationControls page={page} total={total} onPrev={() => setPage(Math.max(1, page - 1))} onNext={() => setPage(page + 1)} />
                 </>
             )}
 
@@ -162,32 +242,38 @@ export default function Scrapbook() {
                 Object.entries(groups).map(([alb, imgs]) => {
                     const top3 = imgs.slice(0, 3);
                     return (
-                        <div key={alb} style={{ marginBottom: "2rem" }}>
-                            <h2 style={{ textTransform: "capitalize" }}>{alb}</h2>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(16rem, 1fr))", gap: "1rem" }}>
-                                {top3.map((it) => (
-                                    <Window key={it.id}>
-                                        <div className="windowContent">
-                                            <img src={it.imageUrl} alt={it.caption} style={{ width: "100%", height: "16rem", objectFit: "cover" }} />
-                                            <div style={{ padding: "0.5rem" }}>
-                                                <div style={{ fontWeight: 600 }}>{it.caption}</div>
-                                                <div style={{ fontSize: "0.85rem", opacity: 0.7 }}>{it.takenAt ? new Date(it.takenAt).toLocaleDateString() : ""}</div>
-                                                <div style={{ marginTop: "0.5rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                                                    {(Array.isArray(it.tags) ? it.tags : []).map(t => (
-                                                        <span key={t} style={{ border: "1px solid #ff8cb6", padding: "0.25rem 0.5rem", borderRadius: "0.25rem", fontSize: "0.8rem" }}>{t}</span>
-                                                    ))}
-                                                </div>
+                        <div key={alb} className={styles.mb2}>
+                            <h2 className={styles.albumHeader}>{alb}</h2>
+                            <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
+                                <PolaroidList items={top3} focusedId={focusedId} onCardClick={handleCardClick} />
+                                {imgs.length > 3 && (
+                                    <div className={styles.seeAllCell}>
+                                        <Button small onClick={() => { setAlbum(alb); setPage(1); }}>
+                                            <div className={styles.buttonInner}>
+                                                <Image src={book} alt="See all" />
+                                                See all
                                             </div>
-                                        </div>
-                                    </Window>
-                                ))}
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <button className="buttonSecondary" onClick={() => { setAlbum(alb); setPage(1); }}>See all</button>
-                                </div>
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     );
                 })
+            )}
+
+            {loading && (
+                <div className={styles.loadingContainer}>
+                    <div className={styles.loadingContent}>
+                        <div className={styles.loadingText}>
+                            <h1>Loading...</h1>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {focusedId && (
+                <div className={styles.focusBackdrop} onClick={() => { setFocusedId(null); setGridClass(""); }} />
             )}
         </PageWrapper>
     )

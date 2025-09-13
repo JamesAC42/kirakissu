@@ -17,7 +17,8 @@ export const Button = ({
     return (
         <button 
             className={`${styles.button} ${isPressed ? styles.pressed : ""} ${small ? styles.small : ""} windowStyle ${active ? styles.active : ""} ${disabled ? styles.disabled : ""}`} 
-            onClick={onClick} 
+            disabled={disabled}
+            onClick={() => { if (!disabled) onClick(); }} 
             onMouseDown={() => setIsPressed(true)} 
             onMouseUp={() => setIsPressed(false)}
             onMouseLeave={() => setIsPressed(false)}
