@@ -7,7 +7,6 @@ import { Window } from "../Window/Window";
 import { Button } from "../Button/Button";
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import popteen from "../../assets/images/gallery/popteen.jpg";
 import previous from "../../assets/images/icons/previous.png";
 import next from "../../assets/images/icons/next.png";
 
@@ -19,7 +18,7 @@ export interface IGalleryPreviewProps {
     }[];
 }
 
-const items = Array.from({ length: 20 });
+// Use incoming images for carousel length
 
 export const GalleryPreview = (props: IGalleryPreviewProps) => {
 
@@ -38,9 +37,9 @@ export const GalleryPreview = (props: IGalleryPreviewProps) => {
 
     const transitionRafRef = useRef<number | null>(null);
 
-    // Initialize refs array if not already done
-    if (itemRefs.current.length !== items.length) {
-        itemRefs.current = Array(items.length).fill(null);
+    // Initialize refs array to match number of images
+    if (itemRefs.current.length !== props.images.length) {
+        itemRefs.current = Array(props.images.length).fill(null);
     }
 
     const setItemRef = useCallback((index: number) => (el: HTMLDivElement | null) => {
@@ -306,19 +305,6 @@ export const GalleryPreview = (props: IGalleryPreviewProps) => {
         <>
             <div className={styles.galleryPreview}>
                 {
-                    props.images.map((image) => (
-                        <div className={styles.galleryPreviewItem} key={image.alt}>
-                            <Window>
-                                <div className={styles.galleryItemInner}>
-                                    <Image src={image.src} alt={image.alt} />
-                                    <p>{image.caption}</p>
-                                </div>
-                            </Window>
-                        </div>
-                    ))
-                }
-
-                {
                     props.images.length === 0 && (
                         <div className={styles.galleryPreviewItem}>
                             <Window>
@@ -334,28 +320,26 @@ export const GalleryPreview = (props: IGalleryPreviewProps) => {
                 onMouseDown={initDrag}
                 ref={paneContainerRef}>
                 <div className={styles.scrollablePaneInner} ref={paneRef}>
-                    {
-                        items.map((item, index) => (
-                            <div 
-                                className={styles.galleryPreviewItem} 
-                                key={index}
-                                ref={setItemRef(index)}>
-                                <Window>
-                                    <div className={styles.galleryItemInner}>
-                                        <Image src={popteen} alt="popteen" />
-                                        <p>This is the image caption! But this one is kinda long!</p>
-                                    </div>
-                                </Window>
-                            </div>
-                        ))
-                    }
+                    {props.images.map((img, index) => (
+                        <div
+                            className={styles.galleryPreviewItem}
+                            key={`${img.src}-${index}`}
+                            ref={setItemRef(index)}>
+                            <Window>
+                                <div className={styles.galleryItemInner}>
+                                    <Image src={img.src} alt={img.alt} width={400} height={300} />
+                                    <p>{img.caption}</p>
+                                </div>
+                            </Window>
+                        </div>
+                    ))}
                 </div>
             </div>
             <div className={styles.actions}>
                 <Button disabled={atLeftEdge} onClick={goToPrev}>
                     <Image src={previous} alt="previous" />
                 </Button>
-                <Button text="view more" onClick={() => {}} />
+                <Button text="view more" onClick={() => { window.location.href = "/scrapbook"; }} />
                 <Button disabled={atRightEdge} onClick={goToNext}>
                     <Image src={next} alt="next" />
                 </Button>

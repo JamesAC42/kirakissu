@@ -22,6 +22,9 @@ import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/Button/Button";
 import { Turnstile } from "@marsidev/react-turnstile";
 
+import hellokittycomputer from "@/assets/images/blog/hellokittycomputer.jpg";
+import tape from "@/assets/images/blog/tape.png";
+
 import commentBubble from "@/assets/images/blog/comment.png";
 import Link from "next/link";
 
@@ -30,7 +33,7 @@ export default function BlogPost() {
     const slug = (params?.slug as string) ?? "";
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>("");
-    const [post, setPost] = useState<{ title: string; excerpt?: string | null; publishedAt?: string | null; markdown: string; likes?: number; views?: number } | null>(null);
+    const [post, setPost] = useState<{ title: string; excerpt?: string | null; publishedAt?: string | null; markdown: string; likes?: number; views?: number, tags?: string[] } | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [liked, setLiked] = useState(false);
     const [liking, setLiking] = useState(false);
@@ -51,7 +54,7 @@ export default function BlogPost() {
                 const r = await fetch(`/api/blog/${encodeURIComponent(slug)}`, { cache: "no-store" });
                 if (!r.ok) throw new Error("Failed to load post");
                 const j = await r.json();
-                setPost({ title: j.title, excerpt: j.excerpt, publishedAt: j.publishedAt, markdown: j.markdown || "", likes: j.likes, views: j.views });
+                setPost({ title: j.title, excerpt: j.excerpt, publishedAt: j.publishedAt, markdown: j.markdown || "", likes: j.likes, views: j.views, tags: j.tags });
                 if (typeof document !== "undefined") {
                     const cookieName = `liked_${encodeURIComponent(slug)}=`;
                     setLiked(document.cookie.split("; ").some(c => c.startsWith(cookieName)));
@@ -186,8 +189,18 @@ export default function BlogPost() {
                 </div>
             </HeaderBox>
             <br/>
-            <Window>
-                <div className={markdownStyles.postContent}>
+            <div className={styles.postTags}>
+                Tags: 
+                {post?.tags?.map((t) => (
+                    <a
+                        href={`/blog?tags=${t}&sort=newest&page=1&pageSize=9`}
+                        className={styles.postTag} key={t}>{t}</a>
+                ))}
+            </div>
+            <div className={styles.postContent}>
+                <Image className={styles.tapeTop} src={tape} alt="tape" width={412} height={123} />
+                <Image className={styles.tapeBottom} src={tape} alt="tape" width={412} height={123} />
+                <div className={`${markdownStyles.postContent}`}>
                     {loading && <p>Loading…</p>}
                     {error && <p>{error}</p>}
                     {!loading && !error && (
@@ -198,7 +211,9 @@ export default function BlogPost() {
                         </>
                     )}
                 </div>
-            </Window>
+                <br/>
+                <Image className={styles.helloKittyComputer} src={hellokittycomputer} alt="post image" width={480} height={480} />
+            </div>
             <br/>
             <Window header="Comments" showButtons={true}>
                 <div className={styles.commentsOuter}>

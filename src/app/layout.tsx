@@ -10,7 +10,8 @@ import {
   starborn,
   notoSansJP,
   pixelMix,
-  chalktastic
+  chalktastic,
+  chewy
 } from "@/styles/fonts";
 
 export const metadata: Metadata = {
@@ -28,7 +29,8 @@ const fonts = [
   starborn,
   notoSansJP,
   pixelMix,
-  chalktastic
+  chalktastic,
+  chewy
 ];
 
 export default function RootLayout({

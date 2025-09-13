@@ -80,6 +80,14 @@ export const chalktastic = localFont({
   weight: "400",
   style: "normal",
 });
+
+export const chewy = localFont({
+  src: "../assets/fonts/Chewy.ttf",
+  variable: "--font-chewy",
+  display: "swap",
+  weight: "400",
+  style: "normal",
+});
 // Add more font declarations here, e.g.
 // export const anotherFont = localFont({
 //   src: "../assets/fonts/AnotherFont.ttf",

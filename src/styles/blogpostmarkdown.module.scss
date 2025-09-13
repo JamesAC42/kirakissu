@@ -1,17 +1,19 @@
 
 .postContent {
     font-size: 1rem;
-    line-height: 1.75rem;
+    line-height: 1.2rem;
     color: #2a2a2a;
 
     padding:0 2rem;
 
     h1, h2, h3, h4, h5, h6 {
-        color: #ff5bb0;
+        color: #ff8399;
         margin-top: 1.5rem;
         margin-bottom: 0.8rem;
         line-height: 1.3;
-        font-family: var(--font-nunito);
+        font-family: var(--font-starborn);
+        font-family: var(--font-chewy);
+        font-family: var(--font-chalktastic);
     }
     h1 { font-size: 2rem; }
     h2 { font-size: 1.8rem; }
@@ -23,21 +25,84 @@
     p { margin: 1rem 0; }
 
     a {
-        color: #7a2ea8;
-        text-decoration: underline;
+        color: #ce42a9;
+        text-decoration: none;
+        font-weight:700;
+        cursor: var(--pointer-cursor-url), auto;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    strong {
+        font-family: var(--font-chewy);
+        color:#f66e8b;
+        font-size:1.2rem;
+        margin:0 0.2rem;
+        font-weight:400;
     }
 
     ul, ol {
         margin: 1rem 0 1rem 1.5rem;
         padding: 0;
     }
+    
+    ol {
+        counter-reset: item;
+        
+        li {
+            display: block;
+            position: relative;
+            padding-left: 2rem;
+            
+            &::before {
+                content: counter(item) ".";
+                counter-increment: item;
+                position: absolute;
+                left: 0;
+                font-family: var(--font-chalktastic);
+                font-family: var(--font-starborn);
+                color: #ff8399;
+                font-weight: bold;
+            }
+        }
+    }
+
+    ul {
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            list-style: none;
+            
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.2rem;
+                width: 1.1rem;
+                height: 1.1rem;
+                transform:translateY(-0.2rem);
+                background-image: url('../assets/images/icons/heart.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+    }
     li { margin: 0.4rem 0; }
 
     blockquote {
         text-align:center;
-        background: #fff7ff;
-        padding: 0.2rem 0;
+        background: #1b191a;
+        color: #ffb7dd;
+        background:#fff9fc;
+        color:#292828;
+        border:1px solid #ffbcd0;
+        box-shadow: 0.125rem 0.125rem 0 0 #ffbcd0c7;
+        border-radius:0.3rem;
+        padding: 2rem;
         margin: 0rem 0 2rem 0;
+        border-radius: 0.3rem;
         font-style: italic;
 
         p { 
@@ -61,8 +126,9 @@
         max-height: 80dvh;
         height: auto;
         margin:1rem auto;
+        margin-top:2rem;
         border: 0.125rem solid #ffbcd0;
-        box-shadow: 0.125rem 0.125rem 0 0 #ffbcd0;
+        box-shadow: 0.125rem 0.125rem 0 0 #ffbcd0c7;
         border-radius: 0.5rem;
     }
 }

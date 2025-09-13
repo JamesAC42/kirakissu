@@ -15,6 +15,7 @@ export default function AdminIndexPage() {
           <li><Link href="/admin/surveys">Manage surveys</Link></li>
           <li><Link href="/admin/results">View results</Link></li>
           <li><Link href="/admin/blog">Manage blog</Link></li>
+          <li><Link href="/admin/scrapbook">Manage scrapbook</Link></li>
         </ul>
       </div>
     </div>

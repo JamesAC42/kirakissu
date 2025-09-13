@@ -188,12 +188,13 @@ export default function Blog() {
                     <div className={styles.tagsContainer}>
                         {(["All", "Music", "Art", "Life", "Gyaru", "Language", "Gaming", "Cooking", "Health", "Beauty", "Fashion"]).map((t) => {
                             const isAll = t === "All";
-                            const active = isAll ? activeTags.length === 0 : activeTags.includes(t);
+                            const tValue = t.toLowerCase();
+                            const active = isAll ? activeTags.length === 0 : activeTags.includes(tValue);
                             return (
                                 <div key={t} className={`${styles.tag} ${active ? styles.activeTag : ""}`}
                                     onClick={() => {
                                         const prev = activeTags;
-                                        const next = isAll ? [] : (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
+                                        const next = isAll ? [] : (prev.includes(tValue) ? prev.filter((x) => x !== tValue) : [...prev, tValue]);
                                         pushQueryToUrl({ activeTags: next, page: 1 });
                                     }}
                                 >{t}</div>
