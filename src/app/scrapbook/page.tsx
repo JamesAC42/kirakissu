@@ -47,22 +47,13 @@ function PolaroidCard({ item, index, focused, onClick }: {
             <div className={`${styles.polaroidCaption}`}>
                 <div className={styles.cardTitle}>{item.caption}</div>
                 <div className={styles.cardDate}>{item.takenAt ? new Date(item.takenAt).toLocaleDateString() : ""}</div>
-                <div className={styles.tagsRow}>
-                    {(Array.isArray(item.tags) ? item.tags : []).map(t => (
-                        <span key={t} className={styles.tagChip}>{t}</span>
-                    ))}
-                </div>
             </div>
-            {
-                focused && (
-                    <div 
-                        className={styles.polaroidOpen}
-                        onClick={(e) => handleOpen(e)}
-                        >
-                        <Image src={open} alt="Open" />
-                    </div>
-                )
-            }
+            <div 
+                className={styles.polaroidOpen}
+                onClick={(e) => handleOpen(e)}
+                >
+                <Image src={open} alt="Open" />
+            </div>
         </div>
     );
 }
@@ -91,13 +82,13 @@ function PaginationControls({ page, total, onPrev, onNext }: {
     return (
         <div className={styles.paginationBar}>
             <div className={styles.buttonRow}>
-                <Button small onClick={onPrev} disabled={page <= 1}>{"< Prev"}</Button>
+                <Button onClick={onPrev} disabled={page <= 1}>{"< Prev"}</Button>
                 {totalPages != null ? (
                     <span>Page {page} / {totalPages}</span>
                 ) : (
                     <span>Page {page}</span>
                 )}
-                <Button small onClick={onNext} disabled={totalPages != null ? page >= totalPages : false}>{"Next >"}</Button>
+                <Button onClick={onNext} disabled={totalPages != null ? page >= totalPages : false}>{"Next >"}</Button>
             </div>
         </div>
     );
@@ -247,13 +238,10 @@ export default function Scrapbook() {
                             <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
                                 <PolaroidList items={top3} focusedId={focusedId} onCardClick={handleCardClick} />
                                 {imgs.length > 3 && (
-                                    <div className={styles.seeAllCell}>
-                                        <Button small onClick={() => { setAlbum(alb); setPage(1); }}>
-                                            <div className={styles.buttonInner}>
-                                                <Image src={book} alt="See all" />
-                                                See all
-                                            </div>
-                                        </Button>
+                                    <div onClick={() => { setAlbum(alb); setPage(1); }}  className={styles.seeAllCell}>
+                                        <div className={styles.buttonInner}>
+                                            View All &gt;
+                                        </div>
                                     </div>
                                 )}
                             </div>
