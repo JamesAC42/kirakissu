@@ -40,9 +40,14 @@ model GuestbookEntry {
   createdAt  DateTime @default(now())
   isApproved Boolean  @default(false)
   ipHash     String
+  parent     GuestbookEntry? @relation("GuestbookReplies", fields: [parentId], references: [id])
+  parentId   String?
+  replies    GuestbookEntry[] @relation("GuestbookReplies")
+  isAdmin    Boolean @default(false)
 
   @@index([createdAt])
   @@index([isApproved])
+  @@index([parentId])
 }
 
 model Poll {

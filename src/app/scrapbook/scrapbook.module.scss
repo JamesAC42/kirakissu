@@ -1,3 +1,5 @@
+@import "@/styles/tilt.module.scss";
+
 .filterBar {
     padding: 1rem;
     margin: 1rem 0;
@@ -85,7 +87,6 @@
     padding: 0.75rem 0.75rem 1rem 0.75rem;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1), box-shadow 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-style: preserve-3d;
-    --tilt: 0deg;
     transform: rotate(var(--tilt)) translateZ(0);
     height:fit-content;
     cursor: var(--pointer-cursor-url), auto;
@@ -128,14 +129,6 @@
     text-align: center;
 }
 
-/* Tilt variants using CSS variable for composition safety */
-.tilt0 { --tilt: -3deg; }
-.tilt4 { --tilt: -1.8deg; }
-.tilt1 { --tilt: -1.0deg; }
-.tilt2 { --tilt: -0.8deg; }
-.tilt6 { --tilt: 1.2deg; }
-.tilt3 { --tilt: 2deg; }
-.tilt5 { --tilt: 4deg; }
 
 /* Lightbox */
 .lightboxBackdrop {

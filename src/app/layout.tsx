@@ -11,7 +11,8 @@ import {
   notoSansJP,
   pixelMix,
   chalktastic,
-  chewy
+  chewy,
+  sourGummy
 } from "@/styles/fonts";
 
 export const metadata: Metadata = {
@@ -30,7 +31,8 @@ const fonts = [
   notoSansJP,
   pixelMix,
   chalktastic,
-  chewy
+  chewy,
+  sourGummy
 ];
 
 export default function RootLayout({

@@ -88,11 +88,20 @@ export const chewy = localFont({
   weight: "400",
   style: "normal",
 });
+
+export const sourGummy = localFont({
+  src: "../assets/fonts/SourGummy.ttf",
+  variable: "--font-sourgummy",
+  display: "swap",
+  weight: "400",
+  style: "normal",
+});
 // Add more font declarations here, e.g.
 // export const anotherFont = localFont({
 //   src: "../assets/fonts/AnotherFont.ttf",
 //   variable: "--font-another",
 //   display: "swap",
 // });
+
 
 

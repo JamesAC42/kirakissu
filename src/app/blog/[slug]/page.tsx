@@ -22,7 +22,7 @@ import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/Button/Button";
 import { Turnstile } from "@marsidev/react-turnstile";
 
-import hellokittycomputer from "@/assets/images/blog/hellokittycomputer.jpg";
+import hellokittycomputer from "@/assets/images/blog/hellokittycomputer.png";
 import tape from "@/assets/images/blog/tape.png";
 
 import commentBubble from "@/assets/images/blog/comment.png";

@@ -10,17 +10,13 @@ import styles from "./scrapbook.module.scss";
 
 import book from "@/assets/images/icons/book.png";
 import open from "@/assets/images/icons/open.png";
+import { computeTilt } from "@/utilities/computeTilt";
 
 type ScrapbookItem = { id: string; imageUrl: string; caption: string; takenAt?: string | null; album?: string | null; tags?: string[] };
 
 function computeTiltClass(item: ScrapbookItem): string {
     const key = (item.id || item.imageUrl || "");
-    let hash = 5381;
-    for (let i = 0; i < key.length; i++) {
-        hash = ((hash << 5) + hash) + key.charCodeAt(i);
-        hash |= 0;
-    }
-    const n = Math.abs(hash) % 7; // 0..6
+    const n = computeTilt(key);
     return `tilt${n}`;
 }
 
