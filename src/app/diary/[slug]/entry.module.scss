@@ -1,0 +1,209 @@
+.entryPage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.backRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.entryHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top:1rem;
+}
+
+.entryTitle {
+    font-family: var(--font-chalktastic);
+    font-size: 2.3rem;
+    color: #ff6fa8;
+    margin: 0;
+    margin-left: 3rem;
+}
+
+.entryMeta {
+    display: flex;
+    gap: 1.5rem;
+    color: #ac8282;
+    font-size: 1.3rem;
+    align-items: center;
+    font-family: var(--font-sourgummy);
+    margin-left: 4rem;
+}
+
+.metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.notebookContainer {
+    position:relative;
+    display:flex;
+}
+
+.stationaryContainer {
+    width:25rem;
+    position:relative;
+
+    .cakeeraser, .pen, .scissors, .cinnamoroll, .applekuma {
+        position:absolute;
+        top:50%;
+        left:50%;
+        height:auto;
+    }
+
+    .cakeeraser {
+        width:130px;
+        transform:translate(calc(-50% - 2rem), calc(-50% + 20rem));
+    }
+
+    .pen {
+        width: 250px;
+        transform:translate(calc(-50% + 2rem), calc(-50% + 2rem)) rotate(20deg);
+    }
+
+    .scissors {
+        width: 160px;
+        transform:translate(calc(-50% - 3rem), calc(-50% - 14rem)) rotate(-10deg);
+    }
+
+    .cinnamoroll {
+        width: 130px;
+        transform:translate(calc(-50% + 6rem), calc(-50% + 11rem)) rotate(-12deg);
+    }
+
+    .applekuma {
+        width: 130px;
+        transform:translate(calc(-50% + 7rem), calc(-50% - 18rem)) rotate(10deg);
+    }
+}
+
+.notebookPaperContainer {
+    position:relative;
+    flex-grow:1;
+    background:#fff;
+}
+
+/* Notebook paper container */
+.notebookPaper {
+    position: relative;
+    background:
+        /* red margin line */
+        linear-gradient(to right,
+            transparent 0 3rem,
+            rgba(255, 59, 48, 0.3) 3rem 3.0625rem,
+            transparent 3.0625rem 100%),
+        /* horizontal lines */
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0 1.75rem,
+            rgba(0, 0, 0, 0.06) 1.75rem 1.8125rem
+        );
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.5rem;
+
+    width:calc(100% - 3rem);
+    min-height: 80dvh;
+
+    .paperHole {
+        position:absolute;
+        width:23px;
+        height:23px;
+        left:0.8rem;
+        top:50%;
+        background:#fffafc;
+        border-radius:50%;
+        box-shadow: inset -1px 0 10px -5px #838383;
+
+        &:nth-child(2) {
+            top:15%;
+        }
+
+        &:nth-child(3) {
+            top:85%;
+        }
+    }
+}
+
+/* Ensure content respects left margin line */
+.notebookContent, .diaryGreeting {
+    padding-left: 3.5rem;
+    margin: 1rem;
+    margin-top:2rem;
+    font-size:1.3rem;
+    font-family: var(--font-sourgummy);
+
+    & > * {
+        max-width:40rem;
+    }
+    p {
+        font-size:1.2rem;
+        color:#302c46;
+        text-indent: 2rem;
+        line-height:1.4;
+    }
+}
+
+.tapeTop, .tapeBottom {
+    position:absolute;
+    width:200px;
+    height:auto;
+}
+
+.tapeTop {
+    top:0;
+    right:0;
+    transform:translate(30%, -20%) rotate(30deg);
+}
+
+.tapeBottom {
+    bottom:0;
+    left:0;
+    transform:translate(-30%, 0%) rotate(390deg);
+}
+
+
+.diaryGreeting {
+    padding-left:3rem;
+}
+
+.notebookContent {
+    margin-left:2rem;
+}
+
+/* Sticker overlay on the paper */
+.stickerWrap {
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin-top:3rem;
+    pointer-events: none;
+    margin-bottom:3rem;
+}
+
+/* Cursive signature at bottom-right */
+.signature {
+    font-family: var(--font-miss-fajardose);
+    font-size: 4.5rem;
+    color: rgba(0, 0, 0, 0.6);
+    text-align: right;
+    margin-top: 1.5rem;
+    padding-right: 5rem;
+}
+
+@media (max-width: 768px) {
+    .entryMeta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+    .notebookContent {
+        padding-left: 2.5rem;
+    }
+}

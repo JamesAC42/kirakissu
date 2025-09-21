@@ -1,16 +1,35 @@
-import { Button } from "../Button/Button"
-import styles from "./diarypanel.module.scss"
-import { StickerContainer } from "../StickerContainer/StickerContainer"
-import { useRouter } from "next/navigation"
-import { Window } from "../Window/Window"
+"use client";
+
+import { Button } from "../Button/Button";
+import styles from "./diarypanel.module.scss";
+import { StickerContainer } from "../StickerContainer/StickerContainer";
+import { useRouter } from "next/navigation";
+import { Window } from "../Window/Window";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
 
 export interface IDiaryPanelProps {
     entries: {
+        id: string,
+        slug: string,
+        title: string,
         date: string,
         preview: string,
-        id: string
     }[]
 }
+
+const formatDate = (value?: string) => {
+    if (!value) {
+        return "";
+    }
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) {
+        return value;
+    }
+    return d.toLocaleDateString();
+};
 
 export const DiaryPanel = (props: IDiaryPanelProps) => {
     const router = useRouter()
@@ -21,12 +40,19 @@ export const DiaryPanel = (props: IDiaryPanelProps) => {
                 {
                     props.entries.map((entry) => (
                         <div className={styles.diaryEntry} key={entry.id}>
-                            <h3>{entry.date}</h3>
-                            <p>{entry.preview}</p>
-                            <div className={styles.diaryButtonContainer}>
-                                <Button text="Read more" onClick={() => router.push(`/diary/${entry.id}`)} />
+                            <div className={styles.entryHeader}>
+                                <h3 className={styles.entryTitle}>{entry.title}</h3>
+                                <span className={styles.entryDate}>{formatDate(entry.date)}</span>
                             </div>
-        
+                            <div className={`${styles.entryPreview} ${markdownStyles.postContent}`}>
+                                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                                    {entry.preview}
+                                </ReactMarkdown>
+                            </div>
+                            <div className={styles.diaryButtonContainer}>
+                                <Button text="Read more" onClick={() => router.push(`/diary/${entry.slug || entry.id}`)} />
+                            </div>
+
                             <div className={styles.diaryStickerContainer}>
                                 <StickerContainer blogId={entry.id} />
                             </div>

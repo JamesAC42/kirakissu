@@ -30,8 +30,19 @@
     }
 
     textarea {
-        @include inputarea;
-        height:8rem;
+        height:12rem;
+        display:block;
+        background:none;
+        border:none;
+        color:#000;
+        width:calc(100% - 1.5rem);
+        min-width:15rem;
+        margin:0 auto;
+        font-family: var(--font-nunito);
+        font-size:1rem;
+        &:focus {
+            outline:none;
+        }
     }
 }
 
@@ -39,20 +50,28 @@
     display:flex;
     align-items:center;
     gap:0.5rem;
+    margin-top:2rem;
 }
 
 .listContainer {
     display:flex;
     flex-direction:row;
-    gap:0.75rem;
+    gap:1rem;
     margin:1rem 0;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 
 .guestbookItem {
-    background:#e0e6ff;
 
     font-family: var(--font-sourgummy);
     font-size:1.4rem;
+    min-width:20rem;
+    max-width:20rem;
+    width:fit-content;
+    background:#fffcbf;
+    min-height:18rem;
+    height:fit-content;
 
     box-shadow: 2px 2px 8px -3px #181818a1;
     transform: rotate(var(--tilt));
@@ -64,6 +83,12 @@
     .stickyContent {
         padding:1.1rem;
         font-weight:700;
+
+        .itemMessage {
+            font-family: var(--font-nunito);
+            font-size:1rem;
+            color:#000000ca;
+        }
     }
 
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
@@ -80,6 +105,16 @@
     display:flex;
     justify-content:space-between;
     margin-bottom:0.5rem;
+    align-items:center;
+
+    .itemName {
+        font-size:1.2rem;
+    }
+
+    .itemTime {
+        font-size:0.9rem;
+        opacity:0.7;
+    }
 }
 
 .itemName {
@@ -91,15 +126,16 @@
 }
 
 .reply {
-    margin-top:0.5rem;
-    padding-left:0.75rem;
-    border-left:0.125rem solid #ff8cb6;
+    margin-top:1rem;
+    box-shadow: 2px 2px 8px -3px #181818a1;
+    transform: rotate(var(--tilt));
 }
 
 .replyHeader {
     display:flex;
     justify-content:space-between;
     margin-bottom:0.25rem;
+    font-size:0.9rem;
 }
 
 .replyName {
@@ -112,6 +148,21 @@
 
 .replyActions {
     margin-top:0.5rem;
+
+    .replyButton {
+        border:1px solid #0000009c;
+        color:#0000009c;
+        cursor: var(--pointer-cursor-url), auto;
+        font-size:0.9rem;
+        font-family: var(--font-nunito);
+        border-radius:0.5rem;
+        width:fit-content;
+        padding:0.5rem 1rem;
+        &:hover {
+            background:#0000009c;
+            color:#fff;
+        }
+    }
 }
 
 

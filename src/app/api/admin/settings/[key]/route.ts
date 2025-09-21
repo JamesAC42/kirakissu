@@ -21,6 +21,9 @@ export async function PUT(request: Request, ctx: { params: Promise<{ key: string
       update: { value: json },
     });
     revalidateTag("homepage");
+    if ((params as { key: string }).key === "profile") {
+      revalidateTag("profile");
+    }
     return new NextResponse(null, { status: 204 });
   } catch (e) {
     return new NextResponse("Bad Request", { status: 400 });

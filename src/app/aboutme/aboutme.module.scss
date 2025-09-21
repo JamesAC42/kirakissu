@@ -1,0 +1,86 @@
+.aboutWrapper {
+    background-image: url('../../assets/images/backgrounds/argyle.jpg');
+    background-repeat: repeat;
+    background-size: auto;
+    padding: 1rem;
+    border-radius: 0;
+
+    border: 2px solid #fe6969;
+    margin-top:2rem;
+}
+
+.contentCard {
+    background: #fff7fa;
+    border-top: 0.1875rem solid #fff;
+    border-left: 0.1875rem solid #fff;
+    border-right: 0.1875rem solid #f8c6da;
+    border-bottom: 0.1875rem solid #f8c6da;
+    outline: 0.0625rem solid #adadad;
+    box-shadow: 0.0625rem 0.0625rem 0 0.0625rem #a3328b;
+    padding: 1rem;
+    /* clearfix for floated images */
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.profileFloat {
+    float: left;
+    margin: 0 4rem 0.5rem 0;
+    margin-right:2rem !important;
+    width: 12rem;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 0.125rem #ffd1e1;
+}
+
+.markdown {
+    /* inherit blog post markdown styles where applicable */
+    img {
+        max-width: 30rem !important;
+        height: auto;
+        display: inline-block;
+        float: right;
+        margin: 0 0 0.5rem 1rem;
+        margin: 1rem 2rem 3rem 2rem !important;
+    }
+}
+
+.floatLeft {
+    float: left !important;
+    margin: 0 1rem 0.5rem 0;
+    max-width: 12rem;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 0.125rem #ffd1e1;
+}
+
+.floatRight {
+    float: right !important;
+    margin: 0 0 0.5rem 1rem;
+    max-width: 12rem;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 0.125rem #ffd1e1;
+}
+
+@media (max-width: 48rem) {
+    .floatLeft, .floatRight, .markdown img {
+        float: none;
+        display: block;
+        margin: 0 0 1rem 0;
+        max-width: 100%;
+    }
+}
+
+.taiyaki {
+    border:none !important;
+    outline:none !important;
+    box-shadow:none !important;
+    width:12rem;
+    height:auto;
+    float:left;
+    margin:2rem 0 !important;
+}

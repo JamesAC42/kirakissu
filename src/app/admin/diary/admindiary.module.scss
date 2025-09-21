@@ -1,0 +1,18 @@
+.tableScroll {
+    overflow-x: auto;
+}
+
+.previewToggleRow {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.contentTextarea {
+    min-height: 18rem;
+}
+
+.markdownPreview {
+    padding: 1rem;
+}

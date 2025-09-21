@@ -2,12 +2,14 @@
 
 import HeaderBox from "@/components/HeaderBox/HeaderBox";
 import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Button } from "@/components/Button/Button";
 import { Turnstile } from "@marsidev/react-turnstile";
 import styles from "./guestbook.module.scss";
 import { Window } from "@/components/Window/Window";
 import { computeTilt } from "@/utilities/computeTilt";
+
+const colors = ["#e0e6ff", "#c9ffe4", "#fffcbf", "#efe1ff", "#ffe5f0", "#ffe9d7", "#d9d3ff", "#ffd8d8"];
 
 export default function Guestbook() {
     const [items, setItems] = useState<Array<{ id: string; name: string; message: string; createdAt: string; isAdmin?: boolean; replies?: Array<{ id: string; name: string; message: string; createdAt: string; isAdmin?: boolean }> }>>([]);
@@ -98,6 +100,10 @@ export default function Guestbook() {
         return `tilt${n}`;
     }
 
+    const colorList = useMemo(() => {
+        return [...colors].sort(() => Math.random() - 0.5);
+    }, [])
+
     return (
         <PageWrapper>
             <HeaderBox header="Guestbook" subtitle2="Leave a sweet note!" showFlashy={false}>
@@ -107,27 +113,34 @@ export default function Guestbook() {
                 {error && <p>{error}</p>}
                 {!loading && !error && (
                     <div className={styles.listContainer}>
-                        {items.map((it) => (
-                            <div key={it.id} className={`${styles.guestbookItem} ${styles[computeTiltClass(it)]}`}>
+                        {items.map((it, index) => (
+                            <div 
+                                key={it.id} 
+                                className={`${styles.guestbookItem} ${styles[computeTiltClass(it)]}`}
+                                style={{ background: colorList[index % colorList.length] }}
+                                >
                                 <div className={styles.stickyTop}></div>
                                 <div className={styles.stickyContent}>
                                     <div className={styles.itemHeader}>
                                         <div className={styles.itemName}>{it.isAdmin ? "Admin" : it.name}</div>
                                         <div className={styles.itemTime}>{new Date(it.createdAt).toLocaleString()}</div>
                                     </div>
-                                    <div>{it.message}</div>
+                                    <div className={styles.itemMessage}>{it.message}</div>
                                     {it.replies?.map((r) => (
-                                        <div key={r.id} className={styles.reply}>
-                                            <div className={styles.replyHeader}>
-                                                <div className={styles.replyName}>{r.isAdmin ? "Admin" : r.name}</div>
-                                                <div className={styles.replyTime}>{new Date(r.createdAt).toLocaleString()}</div>
+                                        <div key={r.id} className={`${styles.reply} ${styles.guestbookItem}]}`}>
+                                            <div className={styles.stickyTop}></div>
+                                            <div className={styles.stickyContent}>
+                                                <div className={styles.replyHeader}>
+                                                    <div className={styles.replyName}>{r.isAdmin ? "Admin" : r.name}</div>
+                                                    <div className={styles.replyTime}>{new Date(r.createdAt).toLocaleString()}</div>
+                                                </div>
+                                                <div className={styles.itemMessage}>{r.message}</div>
                                             </div>
-                                            <div>{r.message}</div>
                                         </div>
                                     ))}
                                     {isAdmin && (
                                         <div className={styles.replyActions}>
-                                            <Button text="Reply" onClick={() => reply(it.id)} />
+                                            <div className={styles.replyButton} onClick={() => reply(it.id)}>Reply</div>
                                         </div>
                                     )}
                                 </div>
@@ -137,12 +150,18 @@ export default function Guestbook() {
                 )}
                 <Window>
                     <div className={styles.formInner}>
+                        <h3>Leave a message!</h3>
                         <label>Name</label>
                         <input type="text" value={name} onChange={(e) => setName(e.target.value.slice(0, 64))} />
                         <label>Email (optional, only visible to admin)</label>
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value.slice(0, 200))} />
                         <label>Message</label>
-                        <textarea ref={textareaRef} value={message} onChange={(e) => setMessage(e.target.value.slice(0, 2000))} />
+                        <div className={styles.guestbookItem}>
+                        <div className={styles.stickyTop}></div>
+                        <div className={styles.stickyContent}>
+                            <textarea ref={textareaRef} placeholder="Leave a message..." value={message} onChange={(e) => setMessage(e.target.value.slice(0, 2000))} />
+                        </div>
+                        </div>
                         <div className={styles.actionsRow}>
                             <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string} onSuccess={(t) => setCaptchaToken(t)} />
                             <Button text="Submit" disabled={submitting || (!isAdmin && !captchaToken)} onClick={async () => {

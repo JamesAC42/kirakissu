@@ -201,3 +201,25 @@ model Comment {
   @@index([parentId])
   @@index([createdAt])
 }
+
+
+model DiaryEntry {
+  id          String         @id @default(uuid())
+  title       String
+  slug        String         @unique
+  content     String
+  status      BlogPostStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([publishedAt])
+  @@index([status])
+}
+
+/// Singleton content for the About Me page. Stores path to markdown on disk.
+model AboutMe {
+  id           Int      @id @default(1)
+  markdownPath String
+  updatedAt    DateTime @updatedAt
+}

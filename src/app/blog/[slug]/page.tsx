@@ -21,6 +21,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/Button/Button";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useRouter } from "next/navigation";
 
 import hellokittycomputer from "@/assets/images/blog/hellokittycomputer.png";
 import tape from "@/assets/images/blog/tape.png";
@@ -29,6 +30,7 @@ import commentBubble from "@/assets/images/blog/comment.png";
 import Link from "next/link";
 
 export default function BlogPost() {
+    const router = useRouter();
     const params = useParams();
     const slug = (params?.slug as string) ?? "";
     const [loading, setLoading] = useState(true);
@@ -146,12 +148,8 @@ export default function BlogPost() {
                             <p>{likes}</p>
                         </div>
                     </div>
-                    <div className={styles.backToAllPosts}>
-                        <Link href="/blog">
-                            <Image src={leftarrow} alt="left" width={16} height={16} />
-                            Back to all posts
-                        </Link>
-                    </div>
+                    <br/>
+                    <Button small text="Back to all posts" onClick={() => router.push("/blog")} />
                 </div>
                 <div className={styles.postActions}>
                     <div className={`${styles.postAction} ${liked ? styles.liked : ""}`} onClick={likeOnce}>
