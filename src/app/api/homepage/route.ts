@@ -1,32 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import matter from "gray-matter";
-import { promises as fs } from "fs";
-import path from "path";
 type BlogPost = { id: string; title: string; content: string; date: string; tags?: string[] };
-type DiaryEntry = { id: string; date: string; preview: string };
+type DiaryEntry = { id: string; slug: string; title: string; date: string; preview: string };
 
-async function readDiaryDir(dir: string, limit: number): Promise<DiaryEntry[]> {
-  try {
-    const entries = await fs.readdir(dir);
-    const mdFiles = entries.filter((f: string) => f.endsWith(".md") || f.endsWith(".mdx"));
-    const parsedFiles = await Promise.all(
-      mdFiles.map(async (file: string) => {
-        const filePath = path.join(dir, file);
-        const raw = await fs.readFile(filePath, "utf8");
-        const parsed = matter(raw);
-        const fm = parsed.data as Record<string, unknown>;
-        const dateStr = typeof fm["date"] === "string" ? (fm["date"] as string) : path.basename(file, path.extname(file));
-        const date = dateStr ? new Date(dateStr) : new Date(0);
-        const preview = parsed.content.trim().slice(0, 280);
-        return { file: filePath, date, dateStr, preview };
-      })
-    );
-    parsedFiles.sort((a: { date: Date }, b: { date: Date }) => b.date.getTime() - a.date.getTime());
-    return parsedFiles.slice(0, limit).map((p) => ({ id: p.dateStr, date: p.dateStr, preview: p.preview }));
-  } catch {
-    return [];
+function normalizeDiaryPreview(content: string, limit = 160): string {
+  const trimmed = content.trim();
+  if (trimmed.length <= limit) {
+    return trimmed;
   }
+  return trimmed.slice(0, limit).trimEnd() + "...";
 }
 
 export async function GET() {
@@ -49,7 +31,6 @@ export async function GET() {
   const quizP = prisma.quiz.findFirst({ where: { active: true }, include: { options: { orderBy: { sort: "asc" } } } });
   const surveyP = prisma.survey.findFirst({ where: { active: true }, include: { options: { orderBy: { sort: "asc" } } } });
 
-  const diaryDir = path.join(process.cwd(), "content", "diary");
   const recentPostsP = (async () => {
     const posts = await prisma.blogPost.findMany({
       where: { status: "PUBLISHED" },
@@ -60,12 +41,29 @@ export async function GET() {
     return posts.map((p) => ({
       id: p.slug,
       title: p.title,
-      content: (p.excerpt ?? ""),
+      content: p.excerpt ?? "",
       date: p.publishedAt ? new Date(p.publishedAt).toISOString().slice(0, 10) : "",
-      tags: (p.tags ?? []).map(t => t),
+      tags: (p.tags ?? []).map((t) => t),
     } satisfies BlogPost));
   })();
-  const diaryEntriesP = readDiaryDir(diaryDir, 3);
+
+  const diaryEntriesP = (async () => {
+    const entries = await prisma.diaryEntry.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+      take: 3,
+    });
+    return entries.map((entry) => {
+      const published = entry.publishedAt ?? entry.createdAt;
+      return {
+        id: entry.id,
+        slug: entry.slug,
+        title: entry.title,
+        date: published ? new Date(published).toISOString().slice(0, 10) : "",
+        preview: normalizeDiaryPreview(entry.content),
+      } satisfies DiaryEntry;
+    });
+  })();
 
   const popularPostsP = (async () => {
     const posts = await prisma.blogPost.findMany({
@@ -77,9 +75,9 @@ export async function GET() {
     return posts.map((p) => ({
       id: p.slug,
       title: p.title,
-      content: (p.excerpt ?? ""),
+      content: p.excerpt ?? "",
       date: p.publishedAt ? new Date(p.publishedAt).toISOString().slice(0, 10) : "",
-      tags: (p.tags ?? []).map(t => t),
+      tags: (p.tags ?? []).map((t) => t),
     } satisfies BlogPost));
   })();
 
@@ -131,8 +129,6 @@ export async function GET() {
     ? { question: survey.question, choices: survey.options.map((o: { id: string; label: string }) => ({ id: o.id, label: o.label })) }
     : null;
 
-  // Popular posts fetched from database
-
   const payload = {
     lastUpdated: nowIso,
     profile: kv["profile"] ?? {},
@@ -150,5 +146,3 @@ export async function GET() {
 
   return NextResponse.json(payload);
 }
-
-
