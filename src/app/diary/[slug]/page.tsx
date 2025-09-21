@@ -20,6 +20,7 @@ import applekuma from "@/assets/images/stickers/applekuma.png";
 import cakeeraser from "@/assets/images/diary/cake-eraser.png";
 import pen from "@/assets/images/diary/pen.png";
 import scissors from "@/assets/images/diary/scissors.png";
+import Link from "next/link";
 
 type DiaryEntry = {
   title: string;
@@ -88,14 +89,13 @@ export default function DiaryEntryPage() {
     };
   }, [slug]);
 
-  const headerTitle = entry?.title?.length ? entry.title : "Diary Entry";
-  const subtitle = entry ? formatDateTime(entry.publishedAt ?? entry.createdAt) : "";
-
   return (
     <PageWrapper>
       <div className={styles.entryPage}>
         <div className={styles.backRow}>
-          <Button text="Back to diary" small onClick={() => router.push("/diary")} />
+          <Link href="/diary" className={styles.backLink}>
+            <Button text="Back to diary" small />
+          </Link>
         </div>
         <div className={styles.notebookContainer}>
           <div className={styles.notebookPaperContainer}>
@@ -123,7 +123,7 @@ export default function DiaryEntryPage() {
                       {entry.content}
                     </ReactMarkdown>
                   </div>
-                  <div className={styles.signature}>— Yuè</div>
+                  <div className={styles.signature}>— KiraKissu</div>
                   <div className={styles.stickerWrap} aria-hidden>
                     <StickerContainer blogId={slug} />
                   </div>

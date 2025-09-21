@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ScreenOverlay } from "@/components/ScreenOverlay/ScreenOverlay";
 import { 
   absoluteBeauty, 
   adelia, 
@@ -45,6 +46,7 @@ export default function RootLayout({
     <html lang="en" className={fontClasses}>
       <body>  
         <script defer src="https://umami.ovel.sh/script.js" data-website-id="2ee8b458-39d7-4cc4-ae04-a92b42124cbb"></script>
+        <ScreenOverlay />
         {children}
       </body>
     </html>

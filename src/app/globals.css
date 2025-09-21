@@ -77,6 +77,18 @@ body {
         max-width:70dvw;
     }
 
+    @media screen and (max-width: 1200px) {
+        gap: 0;
+        .stickyLeft {
+            top:0;
+            transform:scale(0.9) translate(0.5rem, -10px);
+        }
+        .stickyRight {
+            top:0;
+            transform:scale(0.9) translate(-0.5rem, -10px);
+        }
+    }
+
 }
 
 .scrollArea {

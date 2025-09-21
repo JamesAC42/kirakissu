@@ -4,6 +4,7 @@ import styles from "./guestbook.module.scss";
 import { Button } from "../Button/Button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type GuestbookPreviewItem = {
     id: string;
@@ -50,7 +51,9 @@ export const Guestbook = () => {
                 ))}
             </ul>
             <div className={styles.guestbookActions}>
-                <Button text="Go to guestbook" onClick={() => router.push("/guestbook")} />
+                <Link href="/guestbook" className={styles.guestbookLink}>
+                    <Button text="Go to guestbook" />
+                </Link>
             </div>
         </div>
     );

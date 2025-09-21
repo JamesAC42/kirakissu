@@ -1,0 +1,57 @@
+.kaomojiInput {
+    position:relative;
+    width:fit-content;
+    max-width:50%;
+
+    .header {
+        font-family: var(--font-pixel-mix);
+        color:#ff8cb6;
+        font-size:1rem;
+        margin:0.5rem;
+    }
+
+    .kaomojiCategories,
+    .kaomojiList {
+        display:flex;
+        gap:0.5rem;
+    }
+
+    .kaomojiCategories {
+        max-width:100%;
+        overflow-x:auto;
+        padding:0.5rem;
+    }
+
+    .kaomojiList {
+        flex-wrap:wrap;
+        height:20rem;
+        overflow-y:auto;
+        justify-content:space-between;
+        padding:0.5rem;
+    }
+
+    .kaomojiCategory {
+        padding:0.5rem 0.5rem;
+        border:1px solid #ff8cb6;
+        font-size:0.8rem;
+        background:#ffeef59a;
+        backdrop-filter:blur(10px);
+        text-align:center;
+        font-family: var(--font-pixel-mix);
+        cursor: var(--pointer-cursor-url), auto;
+        &.active, &:hover {
+            background:#ff8cb6;
+            color:#fff;
+        }
+    }
+
+    .kaomoji {
+        padding:0.5rem 0.5rem;
+        border:1px solid #b28cff;
+        font-size:0.8rem;
+        background:#ffd2e52e;
+        backdrop-filter:blur(10px);
+        text-align:center;
+        height:fit-content;
+    }
+}

@@ -8,23 +8,8 @@ import { useRouter } from "next/navigation";
 import { Welcome } from "@/components/Welcome/Welcome";
 import { Window } from "@/components/Window/Window";
 import { Button } from "@/components/Button/Button";
-import angellover from "@/assets/images/blinkies/angellover.gif";
-import pinkpink from "@/assets/images/blinkies/pinkpink.gif";
-import gyarulover from "@/assets/images/blinkies/gyarulove.gif";
-import whereami from "@/assets/images/blinkies/whereami.gif";
-import yoursweetness from "@/assets/images/blinkies/yoursweetness.gif";
-import dokidoki from "@/assets/images/blinkies/dokidoki.gif";
-import pastelangel from "@/assets/images/blinkies/pastelangel.gif";
-import mikufan from "@/assets/images/blinkies/mikufan.gif";
-import kawaii from "@/assets/images/blinkies/kawaii.gif";
-import hellokitty from "@/assets/images/blinkies/hellokitty.gif";
-import candyblinky from "@/assets/images/blinkies/candy.gif";
-import softwarm from "@/assets/images/blinkies/softwarm.gif";
-
-import daisuki from "@/assets/images/homepage/daisukiclear.png";
 
 import Image from "next/image";
-import bowbackground from "@/assets/images/backgrounds/bows.jpg";
 
 import tommyairline from "@/assets/images/homepage/tommyairline.jpg";
 import { Calendar } from "@/components/Calendar/Calendar";
@@ -43,9 +28,7 @@ import email from "@/assets/images/social media/email.png";
 
 import orbit from "@/assets/images/orbit.gif";
 import { VerticalNav } from "@/components/VerticalNav/VerticalNav";
-
-// import sheep from "@/assets/images/homepage/sheep.gif";
-// import sailormoonstamp from "@/assets/images/stamps/sailormoon.png";
+import Link from "next/link";
 
 import lollipop from "@/assets/images/homepage/lollipop.png";
 import kissu from "@/assets/images/homepage/kissu.png";
@@ -66,6 +49,8 @@ import { TodoPanel, ITodoPanelProps } from "@/components/TodoPanel/TodoPanel";
 import { BlogPanel, IBlogPanelProps } from "@/components/BlogPanel/BlogPanel";
 import { StatsPanel } from "@/components/StatsPanel/StatsPanel";
 import HeaderBox from "@/components/HeaderBox/HeaderBox";
+import { BlinkiesRow } from "@/components/BlinkiesRow/BlinkiesRow";
+import { Footer } from "@/components/Footer/Footer";
 
 interface HomeState {
   profile: IProfilePanelProps;
@@ -155,9 +140,14 @@ export default function Home() {
               headerText={homeData?.profile?.headerText} 
               subHeaderText={homeData?.profile?.subHeaderText} />
           </Window>
-          <Window header="status" showButtons={true}>
-            <StatusPanel data={homeData?.status ?? {}} />
-          </Window>
+          <div className={styles.showSmall}>
+            <VerticalNav />
+          </div>
+          <div className={styles.hideShort}>
+            <Window header="status" showButtons={true}>
+              <StatusPanel data={homeData?.status ?? {}} />
+            </Window>
+          </div>
         </div>
 
         <div className={styles.homeContainerInner}>
@@ -165,22 +155,32 @@ export default function Home() {
           <div className={styles.windowsGrid}>
             <div className={`${styles.spanFull} ${styles.headerContainer}`}>
               
-              <HeaderBox header="kirakissu" subtitle="いらっしゃいませ!" subtitle2="Welcome to my pink corner of the web" showFlashy={true}>
+              <HeaderBox header="kirakissu" subtitle="いらっしゃいませ!!" subtitle2="Welcome to my pink corner of the web!" showFlashy={true}>
                 <div className={styles.navButtons}>
-                  <Button text="Blog" onClick={() => router.push("/blog")} />
-                  <Button text="About Me" onClick={() => router.push("/aboutme")} />
-                  <Button text="Diary" onClick={() => router.push("/diary")} />
-                  <Button text="Scrapbook" onClick={() => router.push("/scrapbook")} />
-                  <Button text="Guestbook" onClick={() => router.push("/guestbook")} />
+                  <Link href="/blog">
+                    <Button text="Blog" />
+                  </Link>
+                  <Link href="/aboutme">
+                    <Button text="About Me" />
+                  </Link>
+                  <Link href="/diary">
+                    <Button text="Diary" />
+                  </Link>
+                  <Link href="/scrapbook">
+                    <Button text="Scrapbook" />
+                  </Link>
+                  <Link href="/guestbook">
+                    <Button text="Guestbook" />
+                  </Link>
 
                   <div className={styles.socialMediaContainer}>
                     <Button small={true} onClick={() => window.open("https://www.tiktok.com/@kirakissu", "_blank")}>
                       <Image src={tiktok} alt="tiktok" width={20} height={20} />
                     </Button>
-                    <Button small={true} onClick={() => window.open("https://www.instagram.com/kirakissu", "_blank")}>
+                    <Button small={true} onClick={() => window.open("https://www.instagram.com/kirakissu.blog", "_blank")}>
                       <Image src={instagram} alt="instagram" width={20} height={20} />
                     </Button>
-                    <Button small={true} onClick={() => window.open("https://www.x.com/kirakissu", "_blank")}>
+                    <Button small={true} onClick={() => window.open("https://www.x.com/kirakissublog", "_blank")}>
                       <Image src={xlogo} alt="x" width={20} height={20} />
                     </Button>
                     <Button small={true} onClick={() => window.open("https://www.pinterest.com/kirakissu", "_blank")}>
@@ -195,24 +195,7 @@ export default function Home() {
             </div>
 
             <div className={styles.spanFull}>
-              <Window>
-                <div className={'windowContent'}>
-                  <div className={styles.blinkiesRow}>
-                    <Image src={angellover} alt="blinkie" width={150} height={20} />
-                    <Image src={pinkpink} alt="blinkie" width={150} height={20} />
-                    <Image src={gyarulover} alt="blinkie" width={150} height={20} />
-                    <Image src={whereami} alt="blinkie" width={150} height={20} />
-                    <Image src={yoursweetness} alt="blinkie" width={150} height={20} />
-                    <Image src={dokidoki} alt="blinkie" width={150} height={20} />
-                    <Image src={pastelangel} alt="blinkie" width={150} height={20} />
-                    <Image src={mikufan} alt="blinkie" width={150} height={20} />
-                    <Image src={kawaii} alt="blinkie" width={150} height={20} />
-                    <Image src={hellokitty} alt="blinkie" width={150} height={20} />
-                    <Image src={candyblinky} alt="blinkie" width={150} height={20} />
-                    <Image src={softwarm} alt="blinkie" width={150} height={20} />
-                  </div>
-                </div>
-              </Window>
+              <BlinkiesRow />
             </div>
 
             <div id="diary" className={styles.span8}>
@@ -226,14 +209,16 @@ export default function Home() {
                 </div>
               </Window>
               <br/>
-              <Window>
-                <div className={`windowContent ${styles.tommyAirline}`}>
-                  <Image src={tommyairline} alt="tommyairline" width={248} height={247} />
-                  <div className={styles.tommyAirlineText}>
-                  私のお気に入りのアルバムです！
+              <div className={styles.hideSmall}>
+                <Window>
+                  <div className={`windowContent ${styles.tommyAirline}`}>
+                    <Image src={tommyairline} alt="tommyairline" width={248} height={247} />
+                    <div className={styles.tommyAirlineText}>
+                    私のお気に入りのアルバムです！
+                    </div>
                   </div>
-                </div>
-              </Window>
+                </Window>
+              </div>
             </div>
 
             <div id="faq" className={styles.spanFull}>
@@ -243,13 +228,15 @@ export default function Home() {
             </div>
 
             <div className={styles.span2}>
-              <Window>
-                <div 
-                  className={styles.glassCatContainer}
-                  onMouseEnter={() => incrementCatState(1)}>
-                  <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 1 ? styles.glassCatActive : ""}`} />
-                </div>
-              </Window>
+              <div className={styles.hideSmall}>
+                <Window>
+                  <div 
+                    className={styles.glassCatContainer}
+                    onMouseEnter={() => incrementCatState(1)}>
+                    <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 1 ? styles.glassCatActive : ""}`} />
+                  </div>
+                </Window>
+              </div>
               <Image src={hellokittydonut} alt="hellokittydonut" height={364} width={370} className={styles.paneImage} />
             </div>
 
@@ -274,13 +261,15 @@ export default function Home() {
             </div>
 
             <div className={styles.span2}>
-              <Window>
-                <div 
-                  className={styles.glassCatContainer}
-                  onMouseEnter={() => incrementCatState(2)}>
-                  <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 2 ? styles.glassCatActive : ""}`}/>
-                </div>
-              </Window>
+              <div className={styles.hideSmall}>
+                <Window>
+                  <div 
+                    className={styles.glassCatContainer}
+                    onMouseEnter={() => incrementCatState(2)}>
+                    <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 2 ? styles.glassCatActive : ""}`}/>
+                  </div>
+                </Window>
+              </div>
               <Image src={icecream} alt="icecream" height={315} width={432} className={styles.paneImage} />
             </div>
             
@@ -299,13 +288,15 @@ export default function Home() {
             </div>
 
             <div className={styles.span2}>
-              <Window>
-                <div 
-                  className={styles.glassCatContainer}
-                  onMouseEnter={() => incrementCatState(3)}>
-                  <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 3 ? styles.glassCatActive : ""}`}/>
-                </div>
-              </Window>
+              <div className={styles.hideSmall}>
+                <Window>
+                  <div 
+                    className={styles.glassCatContainer}
+                    onMouseEnter={() => incrementCatState(3)}>
+                    <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 3 ? styles.glassCatActive : ""}`}/>
+                  </div>
+                </Window>
+              </div>
               <Image src={lollipop} alt="lollipop" height={260} width={420} className={styles.paneImage} />
             </div>
 
@@ -342,38 +333,25 @@ export default function Home() {
             </div>
                         
             <div className={styles.span2}>
-              <Window>
-                <div 
-                  className={styles.glassCatContainer}
-                  onMouseEnter={() => incrementCatState(4)}>
-                  <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 4 ? styles.glassCatActive : ""}`}/>
-                </div>
-              </Window>
+              <div className={styles.hideSmall}>
+                <Window>
+                  <div 
+                    className={styles.glassCatContainer}
+                    onMouseEnter={() => incrementCatState(4)}>
+                    <Image src={glasscat} alt="glasscat" width={100} height={100} className={`${styles.glassCat} ${catState === 4 ? styles.glassCatActive : ""}`}/>
+                  </div>
+                </Window>
+              </div>
               <Image src={kissu} alt="kissu" height={566} width={440} className={styles.paneImage} />
             </div>
 
             <div className={styles.spanFull}>
-              <Window>
-                <div className={`windowContent ${styles.footerOuter}`}>
-                  <div className={styles.footerContainer}>
-                    <p>made with ♡ copyright 2025 kirakissu</p>
-                    <p>best viewed in desktop mode • 1920x1080</p>
-                    <p>last updated: {homeData?.lastUpdated}</p>
-                    <p>questions? feedback? contact me @ <a href="mailto:admin@kirakissu.com">admin@kirakissu.com</a></p>
-                    <div className={styles.footerImageLeft}>
-                      <Image src={sakura} alt="sakura" className={styles.paneImage} />
-                    </div>
-                    <div className={styles.footerImageRight}>
-                      <Image src={sakura} alt="sakura" className={styles.paneImage} />
-                    </div>
-                  </div>
-                </div>
-              </Window>
+              <Footer lastUpdated={homeData?.lastUpdated ?? ""} />
             </div>
           </div>
         </div>
 
-        <div className={`stickyRight`}>
+        <div className={`stickyRight ${styles.hideSmall}`}>
           <VerticalNav />
           <Window header="calendar" showButtons={true}>
             <div className={`windowContent`}>

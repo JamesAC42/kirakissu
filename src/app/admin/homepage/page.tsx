@@ -79,6 +79,7 @@ export default function AdminHomepageEditor() {
           <input value={profile.headerText ?? ""} onChange={(e) => setProfile({ ...profile, headerText: e.target.value })} />
         </label>
         <br/>
+        <br/>
         <label>Subheader<br/>
           <input value={profile.subHeaderText ?? ""} onChange={(e) => setProfile({ ...profile, subHeaderText: e.target.value })} />
         </label>
@@ -118,6 +119,11 @@ export default function AdminHomepageEditor() {
             <textarea placeholder="Answer" value={q.answer} onChange={(e) => {
               const faqs = [...(faq.faqs ?? [])]; faqs[i] = { ...faqs[i], answer: e.target.value }; setFaq({ faqs });
             }} />
+            <button className={styles.buttonSecondary} onClick={() => {
+              const faqs = [...(faq.faqs ?? [])];
+              faqs.splice(i, 1);
+              setFaq({ faqs });
+            }}>Remove</button>
           </div>
         ))}
         <button className={styles.buttonSecondary} onClick={() => setFaq({ faqs: [...(faq.faqs ?? []), { question: "", answer: "" }] })}>Add FAQ</button>
@@ -166,7 +172,7 @@ export default function AdminHomepageEditor() {
 
       <div className={styles.actionsRow}>
         <button className={styles.buttonPrimary} onClick={save} disabled={saving}>{saving ? "Saving..." : "Save all"}</button>
-        <a className={styles.buttonSecondary + ' ' + styles.backLink} href="/admin">Back</a>
+        <a className={styles.buttonSecondary + ' ' + styles.backLink} href="/admin">← Back</a>
       </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../admin.module.scss";
 import localStyles from "./adminblog.module.scss";
 import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
@@ -211,6 +211,8 @@ export default function AdminBlogPage() {
     return () => clearInterval(interval);
   }, [editing, tagsText]);
 
+  const mdRef = useRef<HTMLTextAreaElement | null>(null);
+
   return (
     <div className={styles.adminRoot}>
       <div className={styles.adminContainer}>
@@ -329,12 +331,13 @@ export default function AdminBlogPage() {
                   return "";
                 }}
                 disabled={preview}
+                textareaRef={mdRef}
               />
               <div className={localStyles.previewToggleRow}>
                 <label><input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} /> Preview</label>
               </div>
               {!preview && (
-                <textarea className={localStyles.markdownEditorTextarea} value={editing.markdown ?? ""} onChange={(e) => setEditing({ ...(editing as BlogPost), markdown: e.target.value })} onPaste={async (e) => {
+                <textarea ref={mdRef} className={localStyles.markdownEditorTextarea} value={editing.markdown ?? ""} onChange={(e) => setEditing({ ...(editing as BlogPost), markdown: e.target.value })} onPaste={async (e) => {
                   if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
                     const file = e.clipboardData.files[0];
                     const url = await (async () => {

@@ -6,7 +6,9 @@
     background-position: center;
     background-attachment: fixed;
 
-    min-height: 100dvh;
+    min-height: calc(100dvh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
     width: 100%;
     padding: 1rem;
     max-width: calc(100% - 2rem);
@@ -17,6 +19,7 @@
 .adminContainer {
     max-width: 65rem;
     margin: 0 auto;
+    margin-top:2rem;
     background: #fff0f5;
     border: 0.125rem solid #f8c6da;
     border-radius: 0.5rem;
@@ -171,8 +174,42 @@
     vertical-align: middle;
 }
 
+.adminContainer input[type="checkbox"] {
+    margin-left: 0.5rem;
+    appearance: none;
+    border: 0.125rem solid #ff8cb6;
+    background: #fff;
+    border-radius: 0.25rem;
+    position: relative;
+    
+    &:checked {
+        background: #ff8cb6;
+        
+        &::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+    }
+}
+
 .adminContainer textarea {
-    min-height: 6rem;
+    min-height: 30rem;
+    font-family: var(--font-nunito);
+    font-size:1rem;
+    padding:2rem;
+    width:calc(100% - 4rem);
+
+    &:focus {
+        border-color: #ffa1a1;
+        outline:none;
+        box-shadow: 0 0 10px 1px #ffa1a1;
+    }
 }
 
 /* Buttons and interactive elements should use the custom pointer */

@@ -4,13 +4,22 @@
     flex-wrap:wrap;
     margin-bottom:1rem;
     button, .uploadBtn {
-        border:2px solid #e792ff;
+        border:2px solid #ff57a3;
+        color:#ff57a3;
         background:#fff;
         padding:0.4rem 0.8rem;
         border-radius:0.5rem;
+        font-size:0.8rem;
+        font-family: var(--font-pixel-mix);
         cursor: var(--pointer-cursor-url), auto;
+
+        &:hover {
+            background:#ff57a3;
+            color:#fff;
+        }
     }
     .uploadBtn {
+
         position:relative;
         overflow:hidden;
         input[type="file"] {

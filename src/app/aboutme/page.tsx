@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import profileImg from "@/assets/images/girl.png";
 import taiyaki from "@/assets/images/stickers/taiyaki.png";
+import { BlinkiesRow } from "@/components/BlinkiesRow/BlinkiesRow";
+import { Footer } from "@/components/Footer/Footer";
 
 export default function AboutMe() {
     const [markdown, setMarkdown] = useState("");
@@ -40,7 +42,9 @@ export default function AboutMe() {
 
     return (
         <PageWrapper>
-            <HeaderBox header="About Me" subtitle2="A little bit about me and my journey." showFlashy={false} />
+            <HeaderBox header="About Me" subtitle2="Wanna be friends?~ learn all about me!" showFlashy={false} />
+            <br />
+            <BlinkiesRow />
             <div className={localStyles.aboutWrapper}>
                 <div className={`${localStyles.contentCard} ${markdownStyles.postContent}`}>
                     <Image className={localStyles.profileFloat} src={profileImg} alt="Profile" width={518} height={448} />
@@ -57,6 +61,8 @@ export default function AboutMe() {
                 <Image className={localStyles.taiyaki} src={taiyaki} alt="Taiyaki" width={349} height={292} />
                 </div>  
             </div>
+            <br />
+            <Footer />
         </PageWrapper>
     )
 }

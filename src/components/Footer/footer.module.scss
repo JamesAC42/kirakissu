@@ -1,0 +1,40 @@
+
+.footerOuter {
+    .footerContainer {
+        position: relative;
+        text-align:center;
+        font-family: var(--font-pixel-mix);
+        font-size:0.8rem;
+        color:#7a5050;
+        line-height:1.5;
+        width:fit-content;
+        margin:0 auto;
+        a {
+            color:#8f80d9;
+            text-decoration:underline;
+            font-weight:700;
+            font-family: var(--font-pixel-mix);
+            font-size:0.8rem;
+            line-height:1.5;
+        }
+
+        .footerImageLeft, .footerImageRight {
+            position:absolute;
+            top:50%;
+            img {
+                width:60px;
+                height:60px;
+            }
+        }
+
+        .footerImageLeft {
+            left:0;
+            transform: translate(-150%, -50%) rotateY(180deg);
+        }
+
+        .footerImageRight {
+            right:0;
+            transform: translate(150%, -50%);
+        }
+    }
+}

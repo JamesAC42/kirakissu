@@ -47,8 +47,12 @@
 }
 
 .stationaryContainer {
-    width:25rem;
+    min-width:20rem;
     position:relative;
+
+    @media screen and (max-width: 1200px) {
+        display:none;
+    }
 
     .cakeeraser, .pen, .scissors, .cinnamoroll, .applekuma {
         position:absolute;
@@ -138,9 +142,10 @@
     margin-top:2rem;
     font-size:1.3rem;
     font-family: var(--font-sourgummy);
+    position:relative;
 
     & > * {
-        max-width:40rem;
+        max-width:95%;
     }
     p {
         font-size:1.2rem;

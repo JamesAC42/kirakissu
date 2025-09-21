@@ -8,6 +8,9 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import styles from "./guestbook.module.scss";
 import { Window } from "@/components/Window/Window";
 import { computeTilt } from "@/utilities/computeTilt";
+import { ProgressBar } from "@/components/ProgressBar/ProgressBar";
+import { KaomojiInput } from "@/components/KaomojiInput/KaomojiInput";
+import { Footer } from "@/components/Footer/Footer";
 
 const colors = ["#e0e6ff", "#c9ffe4", "#fffcbf", "#efe1ff", "#ffe5f0", "#ffe9d7", "#d9d3ff", "#ffd8d8"];
 
@@ -104,9 +107,26 @@ export default function Guestbook() {
         return [...colors].sort(() => Math.random() - 0.5);
     }, [])
 
+    const progress = useMemo(() => {
+        return Math.floor((message.length / 300) * 100);
+    }, [message])
+
+    const insertKaomoji = (kaomoji: string) => {
+
+        const focusPoint = textareaRef.current?.selectionStart;
+        let newMessage = message;
+        if (focusPoint) {
+            newMessage = message.slice(0, focusPoint) + kaomoji + message.slice(focusPoint);
+        } else {
+            newMessage = message + kaomoji;
+        }
+
+        setMessage(newMessage.slice(0, 300));
+    }
+
     return (
         <PageWrapper>
-            <HeaderBox header="Guestbook" subtitle2="Leave a sweet note!" showFlashy={false}>
+            <HeaderBox header="Guestbook" subtitle2="Don’t be shy~ Say hi! I love to see you guys here~" showFlashy={false}>
             </HeaderBox>
             <div className={styles.guestbookRoot}>
                 {loading && <p>Loading…</p>}
@@ -122,16 +142,15 @@ export default function Guestbook() {
                                 <div className={styles.stickyTop}></div>
                                 <div className={styles.stickyContent}>
                                     <div className={styles.itemHeader}>
-                                        <div className={styles.itemName}>{it.isAdmin ? "Admin" : it.name}</div>
+                                        <div className={styles.itemName}>{it.isAdmin ? "KiraKissu" : it.name}</div>
                                         <div className={styles.itemTime}>{new Date(it.createdAt).toLocaleString()}</div>
                                     </div>
                                     <div className={styles.itemMessage}>{it.message}</div>
                                     {it.replies?.map((r) => (
-                                        <div key={r.id} className={`${styles.reply} ${styles.guestbookItem}]}`}>
-                                            <div className={styles.stickyTop}></div>
+                                        <div key={r.id} className={`${styles.reply}`}>
                                             <div className={styles.stickyContent}>
                                                 <div className={styles.replyHeader}>
-                                                    <div className={styles.replyName}>{r.isAdmin ? "Admin" : r.name}</div>
+                                                    <div className={styles.replyName}>{r.isAdmin ? "KiraKissu" : r.name}</div>
                                                     <div className={styles.replyTime}>{new Date(r.createdAt).toLocaleString()}</div>
                                                 </div>
                                                 <div className={styles.itemMessage}>{r.message}</div>
@@ -141,6 +160,11 @@ export default function Guestbook() {
                                     {isAdmin && (
                                         <div className={styles.replyActions}>
                                             <div className={styles.replyButton} onClick={() => reply(it.id)}>Reply</div>
+                                            <div className={styles.replyButton} onClick={async () => {
+                                                if (!confirm("Delete this message?")) return;
+                                                await fetch(`/api/admin/guestbook/${encodeURIComponent(it.id)}`, { method: "DELETE" });
+                                                await reload();
+                                            }}>Delete</div>
                                         </div>
                                     )}
                                 </div>
@@ -156,11 +180,16 @@ export default function Guestbook() {
                         <label>Email (optional, only visible to admin)</label>
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value.slice(0, 200))} />
                         <label>Message</label>
-                        <div className={styles.guestbookItem}>
-                        <div className={styles.stickyTop}></div>
-                        <div className={styles.stickyContent}>
-                            <textarea ref={textareaRef} placeholder="Leave a message..." value={message} onChange={(e) => setMessage(e.target.value.slice(0, 2000))} />
-                        </div>
+                        <div className={styles.messageContainer}>
+                            <div className={styles.guestbookItem}>
+                                <div className={styles.stickyTop}>
+                                    <ProgressBar progress={progress} />
+                                </div>
+                                <div className={styles.stickyContent}>
+                                    <textarea ref={textareaRef} placeholder="Leave a message..." value={message} onChange={(e) => setMessage(e.target.value.slice(0, 300))} />
+                                </div>
+                            </div>
+                            <KaomojiInput onInsert={insertKaomoji}/>
                         </div>
                         <div className={styles.actionsRow}>
                             <Turnstile siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string} onSuccess={(t) => setCaptchaToken(t)} />
@@ -175,10 +204,15 @@ export default function Guestbook() {
                                     await reload();
                                 } finally { setSubmitting(false); }
                             }} />
+                            <div className={styles.credit}>
+                                Credit: Kaomojis from <a href="https://kaomoji.ru/en/" target="_blank">https://kaomoji.ru/en/</a>
+                            </div>
                         </div>
                     </div>
                 </Window>
             </div>
+            <br />
+            <Footer />
         </PageWrapper>
     )
 }

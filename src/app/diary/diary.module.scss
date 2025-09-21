@@ -12,6 +12,11 @@
     background:#fff;
     border-radius:2rem;
     border:1px solid #d48cc479;
+
+    @media screen and (max-width: 1200px) {
+        grid-template-columns: 1fr;
+        box-shadow: 0.25rem -0.2rem 1rem rgba(37, 35, 52, 0.368);
+    }
 }
 
 /* Sidebar */
@@ -19,6 +24,10 @@
     position: relative;
     padding:2rem;
     border-right:3px solid #e7d6e26a;
+    @media screen and (max-width: 1200px) {
+        border-bottom:3px solid #e7d6e26a;
+        border-right:none;
+    }
 }
 
 .stickyBox {
@@ -105,6 +114,9 @@
 
 .yearList {
     padding:1.5rem;
+
+    max-height: 9rem;
+    overflow-y: auto;
 }
 
 .monthList {
@@ -195,6 +207,19 @@
     min-height: 60dvh;
 
     box-shadow: -10px 0 1rem -1rem rgba(0, 0, 0, 0.447);
+
+    @media screen and (max-width: 1200px) {
+        background:
+            linear-gradient(to bottom,
+                transparent 0 3rem,
+                rgba(255, 59, 48, 0.3) 3rem 3.0625rem,
+                transparent 3.0625rem 100%),
+            repeating-linear-gradient(
+                to right,
+                transparent 0 1.75rem,
+                rgba(0, 0, 0, 0.06) 1.75rem 1.8125rem
+            );
+    }
 }
 
 .bulletList {
@@ -202,6 +227,13 @@
     padding: 0 1rem;
     line-height: 1.8;
     color: #5c4a4a;
+
+    max-height: 40dvh;
+    overflow-y: auto;
+
+    @media screen and (max-width: 1200px) {
+    margin: 3rem 0 1rem 3.5rem;
+    }
 }
 
 .loadingState,
@@ -227,6 +259,9 @@
     position:absolute;
     width:70px;
     height:auto;
+    @media screen and (max-width: 1200px) {
+        width:60px;
+    }
 }
 
 .swirlSticker {
@@ -239,6 +274,9 @@
     left:0;
     width:60px;
     transform:translate(150%,0) rotate(10deg);
+    @media screen and (max-width: 1200px) {
+        width:50px;
+    }
 }
 
 .flowerSticker {
@@ -255,4 +293,7 @@
     left:auto;
     width:100px;
     transform:translate(-60%,-70%) rotate(20deg);
+    @media screen and (max-width: 1200px) {
+        width:70px;
+    }
 }

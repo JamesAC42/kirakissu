@@ -47,7 +47,7 @@ export const PageWrapper = ({ children }: IPageWrapperProps) => {
             </div>
             <div className={`stickyRight`}>
                 <Window header="About Me" showButtons={true}>
-                    <ProfilePanel headerText={profile?.headerText || "Hi! I'm Yue ♡"} subHeaderText={profile?.subHeaderText || "Welcome to my digital diary!"} />
+                    <ProfilePanel headerText={profile?.headerText || ""} subHeaderText={profile?.subHeaderText || ""} />
                 </Window>
                 <VerticalNav />
                 <Window>
@@ -56,10 +56,18 @@ export const PageWrapper = ({ children }: IPageWrapperProps) => {
                             Copyright © 2025
                         </div>
                         <div className={styles.socialMedia}>
-                            <Image src={tiktok} alt="tiktok" />
-                            <Image src={instagram} alt="instagram" />
-                            <Image src={xlogo} alt="x" />
-                            <Image src={pinterest} alt="pinterest" />
+                            <a href="https://www.tiktok.com/@kirakissu" target="_blank" rel="noopener noreferrer">
+                                <Image src={tiktok} alt="tiktok" />
+                            </a>
+                            <a href="https://www.instagram.com/kirakissu.blog" target="_blank" rel="noopener noreferrer">
+                                <Image src={instagram} alt="instagram" />
+                            </a>
+                            <a href="https://www.x.com/kirakissublog" target="_blank" rel="noopener noreferrer">
+                                <Image src={xlogo} alt="x" />
+                            </a>
+                            <a href="https://www.pinterest.com/kirakissu" target="_blank" rel="noopener noreferrer">
+                                <Image src={pinterest} alt="pinterest" />
+                            </a>
                         </div>
                     </div>
                 </Window>

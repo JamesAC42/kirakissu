@@ -63,16 +63,19 @@ export const Welcome = ({ onEnter }: { onEnter: () => void }) => {
                     /></h1>
 
                     <p className={styles.welcomeText}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam magnam optio corporis hic animi, asperiores incidunt qui ratione quae nisi tempore. Labore, re
+                        Step inside and make yourself at home, princess~ this little corner of the internet is my dollhouse dreamland, made just for gyarus, living dolls, and all the modern-day princesses who want a touch of magic in everyday life.
                     </p>
                     <p className={styles.welcomeText}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam magnam optio corporis hic animi, asperiores incidunt qui ratione quae nisi tempore. Labore, repellat autem reprehenderit soluta voluptatem hic maiores culpa consectetur explicabo expedita exercit
+                        Here you’ll find a cozy mix of old internet nostalgia, D.I.Y. projects, girly media, dolly fashion inspo, and plenty of pink, frilly prettiness to brighten your day~ Whether you love crafting, dressing up, collecting cute things, or just escaping into a world of nostalgic romance, you’ll find a piece of your heart here.
+                        </p>
+                    <p className={styles.welcomeText}>
+                        Think of this space as a little hideaway where you can be your most extra, glittery, and dolly self~
                     </p>
                     <p className={styles.welcomeText}>
-                        Lorem ipsum dolor sit amet, consect
+                        XOXO,
                     </p>
                     <p className={styles.signature}>
-                        - Ying Yue
+                        KiraKissu
                     </p>
                     <button onClick={onEnter}>Enter Now</button>
                     <p className={styles.copyright}>

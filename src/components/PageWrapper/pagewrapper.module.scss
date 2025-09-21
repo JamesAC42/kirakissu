@@ -12,10 +12,14 @@
     .socialMedia {
         display:flex;
         align-items:center;
-        img {
-            height:25px;
-            width:25px;
-            cursor:var(--pointer-cursor-url), pointer;
+        a {
+            display:block;
+            height:fit-content;
+            img {
+                height:25px;
+                width:25px;
+                cursor:var(--pointer-cursor-url), pointer;
+            }
         }
     }
 }

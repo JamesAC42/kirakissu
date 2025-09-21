@@ -7,9 +7,6 @@ import HeaderBox from "@/components/HeaderBox/HeaderBox";
 import { Button } from "@/components/Button/Button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import sakura from "@/assets/images/sakura.png";
-
-import calendar from "@/assets/images/diary/calendar.png";
 
 import swirl from "@/assets/images/stickers/_swirl.png";
 import star from "@/assets/images/stickers/_star.png";
@@ -17,7 +14,8 @@ import flower from "@/assets/images/stickers/_flower.png";
 import korilakuma from "@/assets/images/stickers/_korilakuma.png";
 
 import sushi from "@/assets/images/diary/sushi.png";
-import mymelody from "@/assets/images/diary/mymelody.png";
+import Link from "next/link";
+import { Footer } from "@/components/Footer/Footer";
 
 type DiaryEntry = {
   id: string;
@@ -55,7 +53,7 @@ export default function Diary() {
       setError("");
       try {
         const pageSize = 50;
-        let page = 1;
+        const page = 1;
         let all: DiaryEntry[] = [];
         let totalCount = 0;
         // Fetch first page to get total
@@ -63,7 +61,7 @@ export default function Diary() {
         if (!firstResp.ok) throw new Error("Failed to load diary entries");
         const firstData = await firstResp.json();
         totalCount = typeof firstData.total === "number" ? firstData.total : 0;
-        all = (firstData.items || []).map((e: any) => ({ id: e.id, slug: e.slug, title: e.title, publishedAt: e.publishedAt }));
+        all = (firstData.items || []).map((e: DiaryEntry) => ({ id: e.id, slug: e.slug, title: e.title, publishedAt: e.publishedAt }));
         // Fetch remaining pages (if any)
         const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
         const fetches: Promise<void>[] = [];
@@ -72,7 +70,7 @@ export default function Diary() {
             fetch(`/api/diary?page=${p}&pageSize=${pageSize}`, { cache: "no-store" })
               .then((r) => r.ok ? r.json() : Promise.reject(new Error("Failed")))
               .then((d) => {
-                const items = (d.items || []).map((e: any) => ({ id: e.id, slug: e.slug, title: e.title, publishedAt: e.publishedAt }));
+                const items = (d.items || []).map((e: DiaryEntry) => ({ id: e.id, slug: e.slug, title: e.title, publishedAt: e.publishedAt }));
                 all = all.concat(items);
               })
           );
@@ -88,7 +86,7 @@ export default function Diary() {
         setEntries(all);
         setTotal(totalCount || all.length);
         setLoading(false);
-      } catch (e: any) {
+      } catch {
         if (!cancelled) {
           setError("Could not load diary entries.");
           setEntries([]);
@@ -147,7 +145,7 @@ export default function Diary() {
   return (
     <PageWrapper>
       <div className={styles.diaryPage}>
-        <HeaderBox header="Diary" subtitle2="A little bit about me and my journey." showFlashy={false} />
+        <HeaderBox header="Diary" subtitle2="Welcome to my sweet little diary, can you keep it a secret?~" showFlashy={false} />
         <div className={styles.diaryLayout}>
           <aside className={styles.sidebar}>
 
@@ -179,7 +177,7 @@ export default function Diary() {
                 <h3>Browse</h3>
                 <Button small text="All entries" onClick={clearFilter} />
               </div>
-              <ul className={styles.yearList}>
+              <ul className={`${styles.yearList} scrollArea`}>
                 {Object.keys(index)
                   .map((y) => parseInt(y, 10))
                   .sort((a, b) => b - a)
@@ -233,23 +231,29 @@ export default function Diary() {
                 <div className={styles.emptyState}>No diary entries yet!</div>
               )}
               {!loading && !error && filtered.length > 0 && (
-                <ul className={styles.bulletList}>
+                <ul className={`${styles.bulletList} scrollArea`}>
                   {filtered.map((entry) => {
                     const date = formatDate(entry.publishedAt);
                     return (
                       <li key={entry.id}>
-                        <button className={styles.entryLink} onClick={() => router.push(`/diary/${entry.slug}`)}>
-                          [{date}] - &quot;{entry.title}&quot;
-                        </button>
+                        <Link href={`/diary/${entry.slug}`} className={styles.entryLink}>
+                          <button className={styles.entryLink}>
+                            [{date}] - &quot;{entry.title}&quot;
+                          </button>
+                        </Link>
                       </li>
                     );
                   })}
+                  <div className={styles.heightTest}></div>
                 </ul>
               )}
             </div>
           </main>
         </div>
       </div>
+      <br />
+      <br />
+      <Footer />  
     </PageWrapper>
   );
 }

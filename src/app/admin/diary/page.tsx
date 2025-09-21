@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../admin.module.scss";
 import localStyles from "./admindiary.module.scss";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
+import MarkdownToolbar from "@/components/MarkdownToolbar/MarkdownToolbar";
 
 type DiaryEntryListItem = {
   id: string;
@@ -144,6 +145,8 @@ export default function AdminDiaryPage() {
     return new Date(value).toLocaleDateString();
   };
 
+  const mdRef = useRef<HTMLTextAreaElement | null>(null);
+
   return (
     <div className={styles.adminRoot}>
       <div className={styles.adminContainer}>
@@ -260,11 +263,23 @@ export default function AdminDiaryPage() {
             </div>
             <div className={styles.fieldRow}>
               <label>Content
+                <MarkdownToolbar
+                  value={editing?.content || ""}
+                  onChange={(next) => setEditing((prev) => prev ? { ...prev, content: next } : prev)}
+                  disabled={preview}
+                  textareaRef={mdRef}
+                  onUploadImage={async (file) => {
+                    const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
+                    if (resp.ok) { const j = await resp.json(); return j.url as string; }
+                    return "";
+                  }}
+                />
                 <div className={localStyles.previewToggleRow}>
                   <label><input type="checkbox" checked={preview} onChange={(e) => setPreview(e.target.checked)} /> Preview</label>
                 </div>
                 {!preview && (
                   <textarea
+                    ref={mdRef}
                     className={localStyles.contentTextarea}
                     value={editing.content}
                     onChange={(e) => setEditing((prev) => prev ? { ...prev, content: e.target.value } : prev)}

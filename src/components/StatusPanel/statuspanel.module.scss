@@ -1,3 +1,18 @@
 .bold {
     font-weight:700;
+    color:#ff6767;
+}
+
+.spinningCatContainer {
+    margin-top:0.5rem;
+    border-radius:0.5rem;
+    display:flex;
+    background:#efc6c6;
+    background:#dfc6ef96;
+    gap:10px;
+    img.spinningCat {
+        width:30%;
+        height:auto;
+        display:inline-block;
+    }
 }

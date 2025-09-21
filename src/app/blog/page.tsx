@@ -20,6 +20,8 @@ import eye from "@/assets/images/icons/eye.png";
 // removed unused icons
 
 import kumabubble from "@/assets/images/blog/kumabubble.png";
+import Link from "next/link";
+import { Footer } from "@/components/Footer/Footer";
 
 type SortOption = "newest" | "oldest" | "popular" | "liked";
 
@@ -155,7 +157,7 @@ export default function Blog() {
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     return (
         <PageWrapper>
-            <HeaderBox header="Blog" subtitle2="Articles and ramblings on music, art, life, and other random things!" showFlashy={false}/>
+            <HeaderBox header="Blog" subtitle2="Find beauty advice, tea party tips, and more! Enjoy~" showFlashy={false}/>
 
             <div className={styles.blogSection}>
                 <div className={styles.featuredPosts}>
@@ -166,7 +168,9 @@ export default function Blog() {
                     </Window>
                     <div className={styles.featuredPostsList}>
                         {featured && (
-                            <PostItem item={featured} featured={true} onClick={() => router.push(`/blog/${featured.slug}`)} />
+                            <Link href={`/blog/${featured.slug}`} className={styles.postLink}>
+                            <PostItem item={featured} featured={true} onClick={() => {}} />
+                            </Link>
                         )}
                         <div className={styles.kumabubbleContainer}>
                             <Image src={kumabubble} alt="kumabubble" width={500} height={500} className={styles.kumabubble} />
@@ -219,7 +223,9 @@ export default function Blog() {
                 </Window>
                 <div className={styles.blogPosts}>
                     {items.map((it) => (
-                        <PostItem key={it.id} featured={false} item={it} onClick={() => router.push(`/blog/${it.slug}`)} />
+                        <Link href={`/blog/${it.slug}`} key={it.id} className={styles.postLink}>
+                            <PostItem featured={false} item={it} onClick={() => {}} />
+                        </Link>
                     ))}
                 </div>
                 <div className={styles.pagination}>
@@ -228,6 +234,8 @@ export default function Blog() {
                     <Button text="Next >" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} />
                 </div>
             </div>
+            <br />
+            <Footer />
         </PageWrapper>
     )
 }

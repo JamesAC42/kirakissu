@@ -96,16 +96,6 @@
         }
     }
 
-    .blinkiesRow {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        padding:0.5rem 0;
-    }
-
-
     .musicControls {
         display: flex;
         gap: 0.5rem;
@@ -146,51 +136,54 @@
             background:linear-gradient(to bottom, #eac0d16d, #ff8cb629);
             z-index:1;
         }
+        @media screen and (max-width: 1200px) {
+            display:none !important;
+        }
     }
 
     .paneImage {
-        margin-top:2rem;
         width:100%;
         height:auto;
+        max-width:10rem;
+        margin-top:2rem;
+        margin:2rem auto;
+        display:flex;
+        justify-content: center;
     }
 
-    .footerOuter {
-        .footerContainer {
-            position: relative;
-            text-align:center;
-            font-family: var(--font-pixel-mix);
-            font-size:0.8rem;
-            color:#7a5050;
-            line-height:1.5;
-            width:fit-content;
-            margin:0 auto;
-            a {
-                color:#8f80d9;
-                text-decoration:underline;
-                font-weight:700;
-                font-family: var(--font-pixel-mix);
-                font-size:0.8rem;
-                line-height:1.5;
-            }
 
-            .footerImageLeft, .footerImageRight {
-                position:absolute;
-                top:50%;
-                img {
-                    width:60px;
-                    height:60px;
-                }
-            }
+    @media screen and (max-width: 1200px) {
+        max-width: 60%;
+        margin-left:0.5rem;
+        
+        .spanFull,
+        .span10,
+        .span8,
+        .span7,
+        .span6,
+        .span5,
+        .span4,
+        .span3,
+        .span2 { grid-column: span 12; }
 
-            .footerImageLeft {
-                left:0;
-                transform: translate(-150%, -70%) rotateY(180deg);
-            }
+    }
+}
 
-            .footerImageRight {
-                right:0;
-                transform: translate(150%, -70%);
-            }
-        }
+.hideSmall {
+    display:block;
+    @media screen and (max-width: 1200px) {
+        display:none !important;
+    }
+}
+.showSmall {
+    display:none;
+    @media screen and (max-width: 1200px) {
+        display:block !important;
+    }
+}
+.hideShort {
+    display:block;
+    @media screen and (max-height: 910px) {
+        display:none !important;
     }
 }

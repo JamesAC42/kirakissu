@@ -149,7 +149,9 @@ export default function BlogPost() {
                         </div>
                     </div>
                     <br/>
-                    <Button small text="Back to all posts" onClick={() => router.push("/blog")} />
+                    <Link href="/blog" className={styles.backToAllPosts}>
+                    <Button small text="Back to all posts" />
+                    </Link>
                 </div>
                 <div className={styles.postActions}>
                     <div className={`${styles.postAction} ${liked ? styles.liked : ""}`} onClick={likeOnce}>
@@ -217,9 +219,9 @@ export default function BlogPost() {
                 <div className={styles.commentsOuter}>
                     <div className={styles.commentsList}>
                         {comments.map((c) => (
-                            <div key={c.id} className={`${styles.comment}`}>
+                            <div key={c.id} className={`${styles.comment} ${c.isAdmin ? styles.adminComment : ""}`}>
                                 <div className={styles.commentMeta}>
-                                    <div className={styles.commentName}>{c.isAdmin ? "Admin" : c.name}</div>
+                                    <div className={styles.commentName}>{c.isAdmin ? "KiraKissu" : c.name}</div>
                                     <div className={styles.commentTimestamp}>{new Date(c.createdAt).toLocaleString()}</div>
                                 </div>
                                 <div className={styles.commentComment}>{c.content}</div>

@@ -3,12 +3,12 @@
 import { Button } from "../Button/Button";
 import styles from "./diarypanel.module.scss";
 import { StickerContainer } from "../StickerContainer/StickerContainer";
-import { useRouter } from "next/navigation";
 import { Window } from "../Window/Window";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
+import Link from "next/link";
 
 export interface IDiaryPanelProps {
     entries: {
@@ -32,7 +32,6 @@ const formatDate = (value?: string) => {
 };
 
 export const DiaryPanel = (props: IDiaryPanelProps) => {
-    const router = useRouter()
 
     return (
         <Window header="diary" showButtons={true} contentClass={`${styles.diaryWindow} scrollArea`}>
@@ -50,7 +49,9 @@ export const DiaryPanel = (props: IDiaryPanelProps) => {
                                 </ReactMarkdown>
                             </div>
                             <div className={styles.diaryButtonContainer}>
-                                <Button text="Read more" onClick={() => router.push(`/diary/${entry.slug || entry.id}`)} />
+                                <Link href={`/diary/${entry.slug || entry.id}`}>
+                                <Button small text="Read more" />
+                                </Link>
                             </div>
 
                             <div className={styles.diaryStickerContainer}>

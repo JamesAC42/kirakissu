@@ -11,6 +11,7 @@ import styles from "./scrapbook.module.scss";
 import book from "@/assets/images/icons/book.png";
 import open from "@/assets/images/icons/open.png";
 import { computeTilt } from "@/utilities/computeTilt";
+import { Footer } from "@/components/Footer/Footer";
 
 type ScrapbookItem = { id: string; imageUrl: string; caption: string; takenAt?: string | null; album?: string | null; tags?: string[] };
 
@@ -189,7 +190,7 @@ export default function Scrapbook() {
 
     return (
         <PageWrapper>
-            <HeaderBox header="Scrapbook" subtitle2="My scrapbook of memories." showFlashy={false}/>
+            <HeaderBox header="Scrapbook" subtitle2="A place for my archive of pretty pictures~" showFlashy={false}/>
             <div className={`windowStyle ${styles.filterBar}`}>
                 <div className={styles.filterRow}>
                     <label className={styles.filterLabel}>
@@ -259,6 +260,9 @@ export default function Scrapbook() {
             {focusedId && (
                 <div className={styles.focusBackdrop} onClick={() => { setFocusedId(null); setGridClass(""); }} />
             )}
+
+            <br />
+            <Footer />
         </PageWrapper>
     )
 }

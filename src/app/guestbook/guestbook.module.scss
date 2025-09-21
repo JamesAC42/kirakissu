@@ -40,9 +40,15 @@
         margin:0 auto;
         font-family: var(--font-nunito);
         font-size:1rem;
+        resize:vertical;
         &:focus {
             outline:none;
         }
+    }
+
+    .messageContainer {
+        display:flex;
+        gap:1rem;
     }
 }
 
@@ -51,6 +57,11 @@
     align-items:center;
     gap:0.5rem;
     margin-top:2rem;
+    margin-bottom:1rem;
+}
+
+.credit {
+    margin-left: auto;
 }
 
 .listContainer {
@@ -127,8 +138,8 @@
 
 .reply {
     margin-top:1rem;
-    box-shadow: 2px 2px 8px -3px #181818a1;
-    transform: rotate(var(--tilt));
+    border:4px dashed #31313131;
+    border-radius:0.5rem;
 }
 
 .replyHeader {
@@ -147,7 +158,9 @@
 }
 
 .replyActions {
-    margin-top:0.5rem;
+    margin-top:1rem;
+    display:flex;
+    gap:0.5rem;
 
     .replyButton {
         border:1px solid #0000009c;
