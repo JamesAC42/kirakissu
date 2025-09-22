@@ -1,6 +1,7 @@
 "use client";
 import styles from './anilist.module.scss';
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import type { AniListCollection } from '@/lib/anilist';
 import { Button } from '../Button/Button';
 import { Window } from '../Window/Window';
@@ -40,7 +41,7 @@ export default function Anilist(props: Props) {
             <div className={styles.header}>
                 <Window>
                     <div className={styles.userContainer}>
-                        <img src={collection.user.avatar.medium} alt="avatar" className={styles.avatar} />
+                        <Image src={collection.user.avatar.medium} alt="avatar" className={styles.avatar} width={48} height={48} />
                         <a href={collection.user.siteUrl} target="_blank" rel="noreferrer" className={styles.userLink}>
                             {collection.user.name}
                             <span className={styles.userId}>#{collection.user.id}</span>

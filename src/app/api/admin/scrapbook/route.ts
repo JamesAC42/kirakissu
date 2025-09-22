@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       caption: data.caption,
       takenAt: data.takenAt ? new Date(data.takenAt) : null,
       album: data.album || null,
-      tags: data.tags ? (data.tags as unknown as Record<string, unknown>) : null,
+      tags: data.tags ?? undefined,
     },
   });
   return NextResponse.json(created);
@@ -43,7 +43,7 @@ export async function PUT(request: Request) {
       caption: data.caption,
       takenAt: data.takenAt ? new Date(data.takenAt) : null,
       album: data.album || null,
-      tags: data.tags ? (data.tags as unknown as Record<string, unknown>) : null,
+      tags: data.tags ?? undefined,
     },
   });
   return NextResponse.json(updated);

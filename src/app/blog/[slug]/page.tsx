@@ -9,7 +9,7 @@ import calendar from "@/assets/images/icons/calendar.png";
 import time from "@/assets/images/icons/time.png";
 import heart from "@/assets/images/icons/heart.png";
 import heartwhite from "@/assets/images/icons/heartwhite.png";
-import leftarrow from "@/assets/images/icons/left.png";
+// import leftarrow from "@/assets/images/icons/left.png";
 import eye from "@/assets/images/icons/eye.png";
 import comment from "@/assets/images/icons/comment.png";
 import share from "@/assets/images/icons/share.png";
@@ -21,7 +21,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/Button/Button";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 import hellokittycomputer from "@/assets/images/blog/hellokittycomputer.png";
 import tape from "@/assets/images/blog/tape.png";
@@ -30,7 +30,6 @@ import commentBubble from "@/assets/images/blog/comment.png";
 import Link from "next/link";
 
 export default function BlogPost() {
-    const router = useRouter();
     const params = useParams();
     const slug = (params?.slug as string) ?? "";
     const [loading, setLoading] = useState(true);

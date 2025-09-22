@@ -5,7 +5,6 @@ import styles from "./diary.module.scss";
 import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
 import HeaderBox from "@/components/HeaderBox/HeaderBox";
 import { Button } from "@/components/Button/Button";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import swirl from "@/assets/images/stickers/_swirl.png";
@@ -36,9 +35,8 @@ const formatDate = (value?: string | null) => {
 };
 
 export default function Diary() {
-  const router = useRouter();
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
-  const [total, setTotal] = useState(0);
+  // total count not displayed; omit state to avoid unused var warning
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -55,12 +53,12 @@ export default function Diary() {
         const pageSize = 50;
         const page = 1;
         let all: DiaryEntry[] = [];
-        let totalCount = 0;
+        // let totalCount = 0;
         // Fetch first page to get total
         const firstResp = await fetch(`/api/diary?page=${page}&pageSize=${pageSize}`, { cache: "no-store" });
         if (!firstResp.ok) throw new Error("Failed to load diary entries");
         const firstData = await firstResp.json();
-        totalCount = typeof firstData.total === "number" ? firstData.total : 0;
+        const totalCount = typeof firstData.total === "number" ? firstData.total : 0;
         all = (firstData.items || []).map((e: DiaryEntry) => ({ id: e.id, slug: e.slug, title: e.title, publishedAt: e.publishedAt }));
         // Fetch remaining pages (if any)
         const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
@@ -84,13 +82,13 @@ export default function Diary() {
           return bd - ad;
         });
         setEntries(all);
-        setTotal(totalCount || all.length);
+        // totalCount available if needed: totalCount || all.length
         setLoading(false);
       } catch {
         if (!cancelled) {
           setError("Could not load diary entries.");
           setEntries([]);
-          setTotal(0);
+          // ignore total count
           setLoading(false);
         }
       }

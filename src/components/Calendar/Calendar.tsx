@@ -14,13 +14,14 @@ const monthNames = [
     "July","August","September","October","November","December"
 ];
 
-const getISOWeek = (date: Date) => {
-    const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = tmp.getUTCDay() || 7;
-    tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1));
-    return Math.ceil((((tmp.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-};
+// keep if needed later
+// const getISOWeek = (date: Date) => {
+//     const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+//     const dayNum = tmp.getUTCDay() || 7;
+//     tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+//     const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1));
+//     return Math.ceil((((tmp.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+// };
 
 const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
 

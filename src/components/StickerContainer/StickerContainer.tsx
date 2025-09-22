@@ -16,8 +16,8 @@ interface StickerData {
 }
 export const StickerContainer = ({ blogId }: { blogId: string }) => {
 
-    const stickers = [milk, swirl, korilakuma, flower, star];
-    const randomStickers: any[] = useMemo((): any[] => {
+    const stickers: StaticImageData[] = useMemo(() => [milk, swirl, korilakuma, flower, star], []);
+    const randomStickers: StickerData[] = useMemo((): StickerData[] => {
         // Create a seeded random number generator
         const mulberry32 = (a: number) => {
             return function() {
@@ -33,7 +33,7 @@ export const StickerContainer = ({ blogId }: { blogId: string }) => {
 
         const numStickers = Math.floor(seededRandom() * 5) + 1;
 
-        const randomStickers = [];
+        const randomStickers: StickerData[] = [];
         for (let i = 0; i < numStickers; i++) {
             const randomIndex = Math.floor(seededRandom() * stickers.length);
             const randomRotation = Math.floor(seededRandom() * 90) - 45; // Random number between -45 and 45
@@ -47,7 +47,7 @@ export const StickerContainer = ({ blogId }: { blogId: string }) => {
         }
 
         return randomStickers;
-    }, [blogId]);
+    }, [blogId, stickers]);
 
     return (
         <div className={styles.stickerContainer}>

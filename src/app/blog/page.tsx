@@ -7,7 +7,7 @@ import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
 import { Window } from "@/components/Window/Window";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 
 import magnifyingglass from "@/assets/images/icons/magnifyingglass.png";
 
@@ -64,7 +64,7 @@ const PostItem = ({ item, onClick, featured }: { item: BlogListItem; onClick: ()
     )
 }
 
-export default function Blog() {
+function BlogContent() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -238,4 +238,12 @@ export default function Blog() {
             <Footer />
         </PageWrapper>
     )
+}
+
+export default function Blog() {
+    return (
+        <Suspense fallback={<PageWrapper><div className={styles.blogSection}><div>Loading…</div></div></PageWrapper>}>
+            <BlogContent />
+        </Suspense>
+    );
 }

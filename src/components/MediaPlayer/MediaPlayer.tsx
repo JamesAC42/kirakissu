@@ -12,7 +12,6 @@ import Image from 'next/image';
 
 export const MediaPlayer = () => {
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [volumeLevel, setVolumeLevel] = useState(1);
@@ -31,7 +30,6 @@ export const MediaPlayer = () => {
     const stopAudio = (reset: boolean = false) => {
         if (audioRef.current) {
             audioRef.current.pause();
-            setIsPlaying(false);
             if (reset) {
                 audioRef.current.currentTime = 0;
                 setCurrentTime(0);
@@ -42,7 +40,6 @@ export const MediaPlayer = () => {
     const playAudio = () => {
         if (audioRef.current) {
             audioRef.current.play();
-            setIsPlaying(true);
         }
     };
 

@@ -3,7 +3,7 @@
 import styles from "./page.module.scss";
 import { useState, useEffect } from "react";
 import { ProfilePanel } from "@/components/ProfilePanel/ProfilePanel";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 import { Welcome } from "@/components/Welcome/Welcome";
 import { Window } from "@/components/Window/Window";
@@ -32,7 +32,7 @@ import Link from "next/link";
 
 import lollipop from "@/assets/images/homepage/lollipop.png";
 import kissu from "@/assets/images/homepage/kissu.png";
-import sakura from "@/assets/images/sakura.png";
+// import sakura from "@/assets/images/sakura.png";
 import icecream from "@/assets/images/homepage/icecream.png";
 import hellokittydonut from "@/assets/images/homepage/hellokittydonut.png";
 
@@ -70,7 +70,7 @@ interface HomeState {
 export default function Home() {
 
   const [hasSeenWelcome, setHasSeenWelcome] = useState<boolean | null>(null);
-  const router = useRouter();
+  // const router = useRouter();
 
   const [catState, setCatState] = useState(1);
 

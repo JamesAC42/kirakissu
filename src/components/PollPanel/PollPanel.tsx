@@ -31,7 +31,7 @@ export const PollPanel = (props: IPollPanelProps) => {
             } else {
                 setSubmitted(true);
             }
-        } catch (e) {
+        } catch {
             setError("Network error");
         } finally {
             setSubmitting(false);

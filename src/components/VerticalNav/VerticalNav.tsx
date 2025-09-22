@@ -12,7 +12,6 @@ import blog from "@/assets/images/icons/blog.png";
 import diary from "@/assets/images/icons/diary.png";
 import scrapbook from "@/assets/images/icons/scrapbook.png";
 import guestbook from "@/assets/images/icons/guestbook.png";
-import Image from "next/image";
 
 export const VerticalNav = () => {
     const pathname = usePathname();

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import styles from "../admin.module.scss";
 
 type ScrapbookItem = {
@@ -119,7 +120,7 @@ export default function AdminScrapbookPage() {
                 <tbody>
                   {items.map((p) => (
                     <tr key={p.id}>
-                      <td><img src={p.imageUrl} alt={p.caption} style={{ height: "4rem" }} /></td>
+                      <td><Image src={p.imageUrl} alt={p.caption} width={64} height={64} style={{ height: "4rem", width: "auto" }} /></td>
                       <td>{p.caption}</td>
                       <td>{p.album || ""}</td>
                       <td>{p.takenAt ? new Date(p.takenAt).toLocaleDateString() : ""}</td>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 const querySchema = z.object({
@@ -23,14 +24,14 @@ export async function GET(request: Request) {
   }
 
   const { page, pageSize, search, status } = parsed.data;
-  const where = {
+  const where: NonNullable<Parameters<typeof prisma.diaryEntry.findMany>[0]>["where"] = {
     ...(status ? { status } : {}),
     ...(search
       ? {
           OR: [
-            { title: { contains: search, mode: "insensitive" } },
-            { slug: { contains: search, mode: "insensitive" } },
-            { content: { contains: search, mode: "insensitive" } },
+            { title: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { slug: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { content: { contains: search, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {}),

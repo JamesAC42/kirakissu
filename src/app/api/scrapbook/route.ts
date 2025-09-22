@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const skip = (page - 1) * pageSize;
   const album = (url.searchParams.get("album") || "").trim();
   // Server-side tag filtering is not implemented for JSON tags; client handles tag filters.
-  const where: Parameters<typeof prisma.scrapbookItem.findMany>[0]["where"] = {
+  const where: NonNullable<Parameters<typeof prisma.scrapbookItem.findMany>[0]>["where"] = {
     ...(album ? { album } : {}),
   };
 

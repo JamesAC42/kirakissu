@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import styles from "./entry.module.scss";
 import { PageWrapper } from "@/components/PageWrapper/PageWrapper";
 // Removed Window wrapper in favor of notebook paper styling
@@ -11,7 +11,6 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
 import Image from "next/image";
-import calendar from "@/assets/images/icons/calendar.png";
 import { StickerContainer } from "@/components/StickerContainer/StickerContainer";
 import tape from "@/assets/images/diary/tape.png";
 import cinnamoroll from "@/assets/images/stickers/cinnamoroll.png";
@@ -45,7 +44,6 @@ const formatDateTime = (value?: string | null) => {
 };
 
 export default function DiaryEntryPage() {
-  const router = useRouter();
   const params = useParams();
   const slug = (params?.slug as string) ?? "";
   const [entry, setEntry] = useState<DiaryEntry | null>(null);

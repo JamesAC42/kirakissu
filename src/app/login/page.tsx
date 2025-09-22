@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "../admin/admin.module.scss";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
@@ -58,6 +58,14 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className={styles.adminRoot}><div className={styles.adminContainer}><h1 className={styles.adminTitle}>Admin Login</h1><p>Loading…</p></div></div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
 

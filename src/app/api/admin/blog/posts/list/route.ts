@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -8,12 +9,12 @@ export async function GET(request: Request) {
   const skip = (page - 1) * pageSize;
   const search = (url.searchParams.get("search") ?? "").trim();
 
-  const where = search
+  const where: NonNullable<Parameters<typeof prisma.blogPost.findMany>[0]>["where"] = search
     ? {
         OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { slug: { contains: search, mode: "insensitive" } },
-          { excerpt: { contains: search, mode: "insensitive" } },
+          { title: { contains: search, mode: Prisma.QueryMode.insensitive } },
+          { slug: { contains: search, mode: Prisma.QueryMode.insensitive } },
+          { excerpt: { contains: search, mode: Prisma.QueryMode.insensitive } },
         ],
       }
     : {};

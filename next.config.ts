@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.amazonaws.com" },
       { protocol: "https", hostname: "**.s3.amazonaws.com" },
       { protocol: "https", hostname: "**.cloudfront.net" },
+      { protocol: "https", hostname: "s4.anilist.co" },
     ],
   },
 };

@@ -22,6 +22,20 @@ type BlogPost = {
   markdown?: string;
 };
 
+const makeSlug = (text: string) =>
+  (text || "")
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const getDraftKey = (title?: string, slug?: string) => {
+  const keySlug = (slug && slug.length) ? slug : makeSlug(title || "");
+  return keySlug ? `blog-autosave:${keySlug}` : "";
+};
+
 export default function AdminBlogPage() {
   const [items, setItems] = useState<BlogPost[]>([]);
   const [page, setPage] = useState(1);
@@ -33,19 +47,7 @@ export default function AdminBlogPage() {
   const [tagsText, setTagsText] = useState<string>("");
   const [preview, setPreview] = useState<boolean>(false);
 
-  const makeSlug = (text: string) =>
-    (text || "")
-      .toLowerCase()
-      .trim()
-      .replace(/['"]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/-{2,}/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const getDraftKey = (title?: string, slug?: string) => {
-    const keySlug = (slug && slug.length) ? slug : makeSlug(title || "");
-    return keySlug ? `blog-autosave:${keySlug}` : "";
-  };
+  
 
   const listQuery = useMemo(() => {
     const params = new URLSearchParams();

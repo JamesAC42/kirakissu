@@ -3,7 +3,6 @@
 import styles from "./guestbook.module.scss";
 import { Button } from "../Button/Button";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type GuestbookPreviewItem = {
@@ -14,7 +13,6 @@ type GuestbookPreviewItem = {
 };
 
 export const Guestbook = () => {
-    const router = useRouter();
     const [items, setItems] = useState<GuestbookPreviewItem[]>([]);
     const [loading, setLoading] = useState(true);
 

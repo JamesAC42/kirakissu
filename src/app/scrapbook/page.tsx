@@ -8,7 +8,6 @@ import Image from "next/image";
 import { Button } from "@/components/Button/Button";
 import styles from "./scrapbook.module.scss";
 
-import book from "@/assets/images/icons/book.png";
 import open from "@/assets/images/icons/open.png";
 import { computeTilt } from "@/utilities/computeTilt";
 import { Footer } from "@/components/Footer/Footer";

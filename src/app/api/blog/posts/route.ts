@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 type SortOption = "newest" | "oldest" | "popular" | "liked";
 
@@ -20,14 +21,14 @@ export async function GET(request: Request) {
     .map((t) => t.trim())
     .filter(Boolean);
 
-  const where: Parameters<typeof prisma.blogPost.findMany>[0]["where"] = {
+  const where: NonNullable<Parameters<typeof prisma.blogPost.findMany>[0]>["where"] = {
     status: "PUBLISHED",
     ...(featuredOnly ? { isFeatured: true } : {}),
     ...(search
       ? {
           OR: [
-            { title: { contains: search, mode: "insensitive" } },
-            { excerpt: { contains: search, mode: "insensitive" } },
+            { title: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { excerpt: { contains: search, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {}),
@@ -38,7 +39,7 @@ export async function GET(request: Request) {
       : {}),
   };
 
-  const orderBy: Parameters<typeof prisma.blogPost.findMany>[0]["orderBy"] =
+  const orderBy: NonNullable<Parameters<typeof prisma.blogPost.findMany>[0]>["orderBy"] =
     sort === "oldest"
       ? [{ publishedAt: "asc" }, { createdAt: "asc" }]
       : sort === "popular"
