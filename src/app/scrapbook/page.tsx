@@ -92,6 +92,7 @@ function PaginationControls({ page, total, onPrev, onNext }: {
 
 export default function Scrapbook() {
     const [items, setItems] = useState<Array<ScrapbookItem>>([]);
+    const [albums, setAlbums] = useState<Array<string>>([]);
     const [album, setAlbum] = useState<string>("");
     const [tagFilter, setTagFilter] = useState<string>("");
     const [page, setPage] = useState<number>(1);
@@ -120,6 +121,21 @@ export default function Scrapbook() {
         setGridClass(styles.gridDim);
     };
 
+    // Load list of albums once; do not derive from filtered items
+    useEffect(() => {
+        (async () => {
+            try {
+                const r = await fetch("/api/scrapbook/albums", { cache: "no-store" });
+                if (r.ok) {
+                    const j = await r.json();
+                    const arr = Array.isArray(j.albums) ? j.albums as string[] : [];
+                    const sorted = [...arr].sort((a, b) => a.localeCompare(b));
+                    setAlbums(sorted);
+                }
+            } catch {}
+        })();
+    }, []);
+
     useEffect(() => {
         setLoading(true);
         (async () => {
@@ -146,7 +162,7 @@ export default function Scrapbook() {
                 return;
             }
 
-            // Album mode: if album selected, paginate; else fetch all (first page size is 100 to get enough per album)
+            // Album mode: if album selected, paginate; else fetch initial chunk
             if (album) {
                 const params = new URLSearchParams();
                 params.set("album", album);
@@ -173,16 +189,11 @@ export default function Scrapbook() {
     const groups = useMemo(() => {
         const byAlbum: Record<string, typeof items> = {};
         for (const it of items) {
-            const key = (it.album || "uncategorized").toLowerCase();
-            byAlbum[key] = byAlbum[key] || [];
-            byAlbum[key].push(it);
+            const label = (it.album && it.album.trim().length > 0) ? it.album : "Uncategorized";
+            byAlbum[label] = byAlbum[label] || [];
+            byAlbum[label].push(it);
         }
         return byAlbum;
-    }, [items]);
-
-    const allAlbums = useMemo(() => {
-        const set = new Set<string>((items || []).map(i => (i.album || "uncategorized").toLowerCase()));
-        return Array.from(set).sort();
     }, [items]);
 
     // Tags list can be computed if needed later
@@ -196,7 +207,8 @@ export default function Scrapbook() {
                         <span>Album:</span>
                         <select value={album} onChange={(e) => { setAlbum(e.target.value); setPage(1); }} className={`${styles.select}`}>
                             <option value="">All</option>
-                            {allAlbums.map(a => (
+                            <option value="__null__">Uncategorized</option>
+                            {albums.map(a => (
                                 <option key={a} value={a}>{a}</option>
                             ))}
                         </select>
@@ -208,19 +220,30 @@ export default function Scrapbook() {
                 </div>
             </div>
             {tagFilter.trim() && (
-                <div className={`${styles.grid} ${gridClass}`}>
-                    <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
-                </div>
+                <>
+                    {items.length === 0 ? (
+                        <div className={`${styles.loadingContainer} windowStyle`}>No pictures match these tags.</div>
+                    ) : (
+                        <div className={`${styles.grid} ${gridClass}`}>
+                            <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
+                        </div>
+                    )}
+                </>
             )}
             {tagFilter.trim() && (
                 <PaginationControls page={page} total={total} onPrev={() => setPage(Math.max(1, page - 1))} onNext={() => setPage(page + 1)} />
             )}
+            
 
             {!tagFilter.trim() && album && (
                 <>
-                    <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
-                        <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
-                    </div>
+                    {items.length === 0 ? (
+                        <div className={`${styles.loadingContainer} windowStyle`}>No pictures to display here.</div>
+                    ) : (
+                        <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
+                            <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
+                        </div>
+                    )}
                     <PaginationControls page={page} total={total} onPrev={() => setPage(Math.max(1, page - 1))} onNext={() => setPage(page + 1)} />
                 </>
             )}
@@ -234,7 +257,7 @@ export default function Scrapbook() {
                             <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
                                 <PolaroidList items={top3} focusedId={focusedId} onCardClick={handleCardClick} />
                                 {imgs.length > 3 && (
-                                    <div onClick={() => { setAlbum(alb); setPage(1); }}  className={styles.seeAllCell}>
+                                    <div onClick={() => { setAlbum(alb === "Uncategorized" ? "__null__" : alb); setPage(1); }}  className={styles.seeAllCell}>
                                         <div className={styles.buttonInner}>
                                             View All &gt;
                                         </div>

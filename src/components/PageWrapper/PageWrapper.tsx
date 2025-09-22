@@ -41,7 +41,7 @@ export const PageWrapper = ({ children }: IPageWrapperProps) => {
     }, []);
 
     return (
-        <div className={`pageContainer scrollArea`}>
+        <div className={`pageContainer scrollArea ${styles.pageWrapperContainer}`}>
             <div className={`pageContent`}>
                 {children}
             </div>
