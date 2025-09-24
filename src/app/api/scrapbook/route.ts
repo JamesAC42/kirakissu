@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -16,9 +17,9 @@ export async function GET(request: Request) {
     const target = normalize(wantUncategorized ? "" : albumParam);
 
     // Broad prefilter to reduce dataset size
-    const broadWhere: NonNullable<Parameters<typeof prisma.scrapbookItem.findMany>[0]>["where"] = wantUncategorized
+    const broadWhere: Prisma.ScrapbookItemWhereInput = wantUncategorized
       ? {}
-      : { album: { contains: albumParam, mode: "insensitive" } } as any;
+      : { album: { contains: albumParam, mode: "insensitive" } };
 
     const allForAlbum = await prisma.scrapbookItem.findMany({
       where: broadWhere,
