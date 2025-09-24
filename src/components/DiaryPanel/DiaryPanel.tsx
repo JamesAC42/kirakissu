@@ -43,10 +43,12 @@ export const DiaryPanel = (props: IDiaryPanelProps) => {
                                 <h3 className={styles.entryTitle}>{entry.title}</h3>
                                 <span className={styles.entryDate}>{formatDate(entry.date)}</span>
                             </div>
-                            <div className={`${styles.entryPreview} ${markdownStyles.postContent}`}>
-                                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                                    {entry.preview}
-                                </ReactMarkdown>
+                            <div className={styles.entryPreviewContainer}>
+                                <div className={`${styles.entryPreview} ${markdownStyles.postContent}`}>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                                        {entry.preview}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                             <div className={styles.diaryButtonContainer}>
                                 <Link href={`/diary/${entry.slug || entry.id}`}>
