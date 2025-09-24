@@ -186,6 +186,23 @@ export default function Scrapbook() {
         })();
     }, [album, tagFilter, page]);
 
+    // When focused, clicking anywhere outside a polaroid clears focus
+    useEffect(() => {
+        if (!focusedId) return;
+        const onDocClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement | null;
+            if (target && target.closest && target.closest(`.${styles.polaroid}`)) {
+                return;
+            }
+            setFocusedId(null);
+            setGridClass("");
+        };
+        document.addEventListener("click", onDocClick);
+        return () => {
+            document.removeEventListener("click", onDocClick);
+        };
+    }, [focusedId]);
+
     const groups = useMemo(() => {
         const byAlbum: Record<string, typeof items> = {};
         for (const it of items) {
@@ -278,11 +295,6 @@ export default function Scrapbook() {
                     </div>
                 </div>
             )}
-
-            {focusedId && (
-                <div className={styles.focusBackdrop} onClick={() => { setFocusedId(null); setGridClass(""); }} />
-            )}
-
             <br />
             <Footer />
         </PageWrapper>

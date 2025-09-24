@@ -47,6 +47,7 @@
 
 .gridDim {
     position: relative;
+    z-index: 4000;
 }
 
 .gridDim .polaroid {
@@ -188,15 +189,6 @@
 @keyframes zoomIn {
     0% { transform: scale(0.9); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
-}
-
-.focusBackdrop {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 2500;
 }
 
 .polaroidOpen {
