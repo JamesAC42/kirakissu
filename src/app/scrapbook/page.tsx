@@ -100,11 +100,13 @@ export default function Scrapbook() {
     const [focusedId, setFocusedId] = useState<string | null>(null);
     const [gridClass, setGridClass] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+    const [focusedAlbumKey, setFocusedAlbumKey] = useState<string | null>(null);
 
     const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, item: ScrapbookItem) => {
         if (focusedId === item.id) {
             setFocusedId(null);
             setGridClass("");
+            setFocusedAlbumKey(null);
             return;
         }
         const card = (e.currentTarget as HTMLDivElement);
@@ -196,6 +198,7 @@ export default function Scrapbook() {
             }
             setFocusedId(null);
             setGridClass("");
+            setFocusedAlbumKey(null);
         };
         document.addEventListener("click", onDocClick);
         return () => {
@@ -242,7 +245,14 @@ export default function Scrapbook() {
                         <div className={`${styles.loadingContainer} windowStyle`}>No pictures match these tags.</div>
                     ) : (
                         <div className={`${styles.grid} ${gridClass}`}>
-                            <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
+                            <PolaroidList
+                                items={items}
+                                focusedId={focusedId}
+                                onCardClick={(e, item) => {
+                                    setFocusedAlbumKey("__tags__");
+                                    handleCardClick(e, item);
+                                }}
+                            />
                         </div>
                     )}
                 </>
@@ -257,8 +267,15 @@ export default function Scrapbook() {
                     {items.length === 0 ? (
                         <div className={`${styles.loadingContainer} windowStyle`}>No pictures to display here.</div>
                     ) : (
-                        <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
-                            <PolaroidList items={items} focusedId={focusedId} onCardClick={handleCardClick} />
+                        <div className={`${styles.grid} ${styles.mt1} ${focusedId ? styles.gridDim : ""}`}>
+                            <PolaroidList
+                                items={items}
+                                focusedId={focusedId}
+                                onCardClick={(e, item) => {
+                                    setFocusedAlbumKey(album);
+                                    handleCardClick(e, item);
+                                }}
+                            />
                         </div>
                     )}
                     <PaginationControls page={page} total={total} onPrev={() => setPage(Math.max(1, page - 1))} onNext={() => setPage(page + 1)} />
@@ -271,10 +288,17 @@ export default function Scrapbook() {
                     return (
                         <div key={alb} className={styles.mb2}>
                             <h2 className={styles.albumHeader}>{alb}</h2>
-                            <div className={`${styles.grid} ${styles.mt1} ${gridClass}`}>
-                                <PolaroidList items={top3} focusedId={focusedId} onCardClick={handleCardClick} />
+                            <div className={`${styles.grid} ${styles.mt1} ${focusedId && focusedAlbumKey === alb ? styles.gridDim : ""}`}>
+                                <PolaroidList
+                                    items={top3}
+                                    focusedId={focusedId}
+                                    onCardClick={(e, item) => {
+                                        setFocusedAlbumKey(alb);
+                                        handleCardClick(e, item);
+                                    }}
+                                />
                                 {imgs.length > 3 && (
-                                    <div onClick={() => { setAlbum(alb === "Uncategorized" ? "__null__" : alb); setPage(1); }}  className={styles.seeAllCell}>
+                                    <div onClick={() => { setAlbum(alb === "Uncategorized" ? "__null__" : alb); setPage(1); setFocusedId(null); setFocusedAlbumKey(null); setGridClass(""); }}  className={styles.seeAllCell}>
                                         <div className={styles.buttonInner}>
                                             View All &gt;
                                         </div>
