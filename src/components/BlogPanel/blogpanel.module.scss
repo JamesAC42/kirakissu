@@ -75,9 +75,19 @@
             .blogItem {
                 margin-bottom:1rem;
                 position:relative;
+                padding-bottom:0.5rem;
+                &::before {
+                    content:"";
+                    position:absolute;
+                    top:50%;
+                    left:-12px;
+                    width:0px;
+                    transform:translate(0, -50%);
+                    height:calc(100%);
+                    outline:1px dashed #fba6dc;
+                }
                 &:hover {
                     cursor: var(--pointer-cursor-url), auto;
-                    
                     &::before {
                         content:"";
                         position:absolute;
@@ -98,28 +108,28 @@
                     padding:0;
                     color:#ff8cb4;
                     font-family: var(--font-pixel-mix);
-                    margin-bottom:0.5rem;
+                    margin-bottom:0.8rem;
                     .blogTitle {
                         max-width:20rem;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
                     }
-                    .blogTags {
-                        margin-left:0.5rem;
-                        display:flex;
-                        gap:0.1rem;
-                        align-items:center;
-                        .blogTag {
-                            margin-top:0.25rem;
-                            font-size:0.8rem;
-                            display:block;
-                            padding:0.25rem 0.5rem;
-                            background:#ff90be;
-                            border-radius:0.5rem;
-                            color:#fff;
-                            font-family: var(--font-nunito);
-                        }
+                }
+                .blogTags {
+                    display:flex;
+                    gap:0.1rem;
+                    align-items:center;
+                    flex-wrap:wrap;
+                    .blogTag {
+                        margin-top:0rem;
+                        font-size:0.8rem;
+                        display:block;
+                        padding:0.25rem 0.5rem;
+                        background:#ff90be;
+                        border-radius:0.5rem;
+                        color:#fff;
+                        font-family: var(--font-nunito);
                     }
                 }
 
@@ -127,11 +137,14 @@
                     font-size:0.8rem;
                     color:#bb9f96;
                     font-family: var(--font-pixel-mix);
-                    margin:0.5rem 0;
+                    margin:0;
+                    margin-left:0.5rem;
+                    transform:translateY(1px);
                 }
 
                 p {
                     margin:0;
+                    margin-top:0.5rem;
                     color:#674d45;
                     font-family: var(--font-nunito);
                 }

@@ -67,13 +67,13 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                             <div className={styles.blogItem} key={post.id} onClick={() => goToPost(post.id)}>
                                 <h3>
                                     <span className={styles.blogTitle}>{post.title}</span>
-                                    <span className={styles.blogTags}>
-                                        {(post.tags || []).slice(0, 5).map((t) => (
-                                            <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
-                                        ))}
-                                    </span>
+                                    <span className={styles.blogDate}>{post.date}</span>
                                 </h3>
-                                <div className={styles.blogDate}>{post.date}</div>
+                                <div className={styles.blogTags}>
+                                    {(post.tags || []).slice(0, 5).map((t) => (
+                                        <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
+                                    ))}
+                                </div>
                                 <p>{short}</p>
                             </div>
                         );
@@ -99,13 +99,13 @@ export const BlogPanel = (props: IBlogPanelProps) => {
                             <div className={styles.blogItem} key={post.id} onClick={() => goToPost(post.id)}>
                                 <h3>
                                     <span className={styles.blogTitle}>{post.title}</span>
-                                    <span className={styles.blogTags}>
-                                        {(post.tags || []).slice(0, 5).map((t) => (
-                                            <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
-                                        ))}
-                                    </span>
+                                    <span className={styles.blogDate}>{post.date}</span>
                                 </h3>
-                                <div className={styles.blogDate}>{post.date}</div>
+                                <div className={styles.blogTags}>
+                                    {(post.tags || []).slice(0, 5).map((t) => (
+                                        <span key={t} className={styles.blogTag} onClick={(e) => { e.stopPropagation(); goToTag(t); }}>{t}</span>
+                                    ))}
+                                </div>
                                 <p>{short}</p>
                             </div>
                         );
