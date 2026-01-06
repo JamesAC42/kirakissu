@@ -33,22 +33,42 @@ export function getAuthCookieName(): string {
 
 export async function verifyTurnstile(token: string, ip?: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return false;
+  if (!secret) {
+    console.warn("[verifyTurnstile] Missing TURNSTILE_SECRET_KEY env");
+    return false;
+  }
   try {
     const formData = new FormData();
     formData.append("secret", secret);
     formData.append("response", token);
-    if (ip) formData.append("remoteip", ip);
+    if (ip) {
+      formData.append("remoteip", ip);
+      console.log("[verifyTurnstile] Provided remoteip:", ip);
+    }
 
+    console.log("[verifyTurnstile] Sending Turnstile siteverify request...");
     const resp = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       body: formData,
     });
-    const data = (await resp.json()) as { success?: boolean };
+
+    if (!resp.ok) {
+      console.warn(`[verifyTurnstile] Non-OK HTTP response: ${resp.status} ${resp.statusText}`);
+      return false;
+    }
+
+    const data = (await resp.json()) as { success?: boolean; 'error-codes'?: string[] };
+    console.log("[verifyTurnstile] Verification response data:", data);
+
+    if (!data.success && data["error-codes"]) {
+      console.warn("[verifyTurnstile] Turnstile verification errors:", data["error-codes"]);
+    }
     return !!data.success;
-  } catch {
+  } catch (err) {
+    console.error("[verifyTurnstile] Error during Turnstile verification:", err);
     return false;
   }
 }
+
 
 
