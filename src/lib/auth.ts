@@ -31,8 +31,26 @@ export function getAuthCookieName(): string {
   return JWT_COOKIE;
 }
 
+function normalizeEnvValue(value: string | undefined): string | null {
+  if (!value) return null;
+  // Trim whitespace and strip surrounding quotes (common when secrets are copied with quotes)
+  const trimmed = value.trim();
+  const unquoted = trimmed.replace(/^['"]|['"]$/g, "").trim();
+  return unquoted.length ? unquoted : null;
+}
+
+function maskIp(ip: string): string {
+  if (ip.includes(".")) {
+    const parts = ip.split(".");
+    if (parts.length === 4) return `${parts[0]}.${parts[1]}.***.***`;
+  }
+  // IPv6 or unexpected formats: keep only a short prefix
+  return `${ip.slice(0, 6)}…`;
+}
+
 export async function verifyTurnstile(token: string, ip?: string): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
+  const debug = process.env.TURNSTILE_DEBUG === "1" || process.env.NODE_ENV !== "production";
+  const secret = normalizeEnvValue(process.env.TURNSTILE_SECRET_KEY);
   if (!secret) {
     console.warn("[verifyTurnstile] Missing TURNSTILE_SECRET_KEY env");
     return false;
@@ -43,10 +61,17 @@ export async function verifyTurnstile(token: string, ip?: string): Promise<boole
     formData.append("response", token);
     if (ip) {
       formData.append("remoteip", ip);
-      console.log("[verifyTurnstile] Provided remoteip:", ip);
+      if (debug) console.log("[verifyTurnstile] Provided remoteip:", maskIp(ip));
     }
 
-    console.log("[verifyTurnstile] Sending Turnstile siteverify request...");
+    if (debug) {
+      console.log("[verifyTurnstile] Sending Turnstile siteverify request...", {
+        secretLen: secret.length,
+        secretLast4: secret.slice(-4),
+      });
+    } else {
+      console.log("[verifyTurnstile] Sending Turnstile siteverify request...");
+    }
     const resp = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       body: formData,
@@ -57,8 +82,19 @@ export async function verifyTurnstile(token: string, ip?: string): Promise<boole
       return false;
     }
 
-    const data = (await resp.json()) as { success?: boolean; 'error-codes'?: string[] };
-    console.log("[verifyTurnstile] Verification response data:", data);
+    const data = (await resp.json()) as {
+      success?: boolean;
+      "error-codes"?: string[];
+      messages?: unknown[];
+      hostname?: string;
+      challenge_ts?: string;
+      action?: string;
+    };
+    if (debug) {
+      console.log("[verifyTurnstile] Verification response data:", data);
+    } else if (!data.success) {
+      console.warn("[verifyTurnstile] Verification failed:", { "error-codes": data["error-codes"] });
+    }
 
     if (!data.success && data["error-codes"]) {
       console.warn("[verifyTurnstile] Turnstile verification errors:", data["error-codes"]);
