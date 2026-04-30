@@ -45,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontClasses}>
       <body>  
-        <script defer src="https://umami.ovel.sh/script.js" data-website-id="2ee8b458-39d7-4cc4-ae04-a92b42124cbb"></script>
+        <script defer src="https://umami.fukuin.dev/script.js" data-website-id="2ee8b458-39d7-4cc4-ae04-a92b42124cbb"></script>
         <ScreenOverlay />
         {children}
       </body>
