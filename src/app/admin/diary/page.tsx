@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
 import MarkdownToolbar from "@/components/MarkdownToolbar/MarkdownToolbar";
+import { uploadImage } from "@/lib/uploadImage";
 
 type DiaryEntryListItem = {
   id: string;
@@ -269,9 +270,7 @@ export default function AdminDiaryPage() {
                   disabled={preview}
                   textareaRef={mdRef}
                   onUploadImage={async (file) => {
-                    const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                    if (resp.ok) { const j = await resp.json(); return j.url as string; }
-                    return "";
+                    return uploadImage(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, file);
                   }}
                 />
                 <div className={localStyles.previewToggleRow}>

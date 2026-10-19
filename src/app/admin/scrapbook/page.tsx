@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import styles from "../admin.module.scss";
+import { uploadImage } from "@/lib/uploadImage";
 
 type ScrapbookItem = {
   id?: string;
@@ -168,11 +169,8 @@ export default function AdminScrapbookPage() {
                     const file = e.target.files?.[0];
                     if (!file) return;
                     const albumParam = encodeURIComponent((editing.album || "uncategorized").toLowerCase());
-                    const resp = await fetch(`/api/admin/scrapbook/upload?filename=${encodeURIComponent(file.name)}&album=${albumParam}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                    if (resp.ok) {
-                      const j = await resp.json();
-                      setEditing({ ...(editing as ScrapbookItem), imageUrl: j.url as string });
-                    }
+                    const url = await uploadImage(`/api/admin/scrapbook/upload?filename=${encodeURIComponent(file.name)}&album=${albumParam}`, file);
+                    if (url) setEditing({ ...(editing as ScrapbookItem), imageUrl: url });
                     if (e.currentTarget) {
                       e.currentTarget.value = "";
                     }

@@ -8,8 +8,6 @@ export async function POST(request: Request) {
     const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
     const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
-    console.log(region, bucket, accessKeyId, secretAccessKey);
-
     if (!region) return NextResponse.json({ error: "Missing AWS_REGION (or AWS_DEFAULT_REGION)" }, { status: 500 });
     if (!bucket) return NextResponse.json({ error: "Missing AWS_S3_BUCKET" }, { status: 500 });
     if (!accessKeyId || !secretAccessKey) return NextResponse.json({ error: "Missing AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY" }, { status: 500 });
