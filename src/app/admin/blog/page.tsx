@@ -8,6 +8,7 @@ import MarkdownToolbar from "@/components/MarkdownToolbar/MarkdownToolbar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { uploadImage } from "@/lib/uploadImage";
 
 type BlogPost = {
   id?: string;
@@ -295,11 +296,8 @@ export default function AdminBlogPage() {
                   <input className={localStyles.hiddenFileInput} type="file" accept="image/*" onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
-                    const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                    if (resp.ok) {
-                      const j = await resp.json();
-                      setEditing({ ...(editing as BlogPost), coverImage: j.url as string });
-                    }
+                    const url = await uploadImage(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, file);
+                    if (url) setEditing({ ...(editing as BlogPost), coverImage: url });
 
                     if (e.currentTarget) {
                       e.currentTarget.value = "";
@@ -328,9 +326,7 @@ export default function AdminBlogPage() {
                 value={editing.markdown ?? ""}
                 onChange={(next) => setEditing({ ...(editing as BlogPost), markdown: next })}
                 onUploadImage={async (file) => {
-                  const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                  if (resp.ok) { const j = await resp.json(); return j.url as string; }
-                  return "";
+                  return uploadImage(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, file);
                 }}
                 disabled={preview}
                 textareaRef={mdRef}
@@ -343,9 +339,7 @@ export default function AdminBlogPage() {
                   if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
                     const file = e.clipboardData.files[0];
                     const url = await (async () => {
-                      const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                      if (resp.ok) { const j = await resp.json(); return j.url as string; }
-                      return "";
+                      return uploadImage(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, file);
                     })();
                     if (url) {
                       e.preventDefault();

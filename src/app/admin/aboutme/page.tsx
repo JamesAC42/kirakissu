@@ -7,6 +7,7 @@ import markdownStyles from "@/styles/blogpostmarkdown.module.scss";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { uploadImage } from "@/lib/uploadImage";
 
 export default function AdminAboutMePage() {
   const [markdown, setMarkdown] = useState("");
@@ -80,9 +81,7 @@ export default function AdminAboutMePage() {
             <div>
               <MarkdownToolbar value={markdown} onChange={setMarkdown} textareaRef={textareaRef} 
                 onUploadImage={async (file) => {
-                  const resp = await fetch(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, { method: "POST", headers: { "content-type": file.type || "application/octet-stream" }, body: file });
-                  if (resp.ok) { const j = await resp.json(); return j.url as string; }
-                  return "";
+                  return uploadImage(`/api/admin/blog/upload?filename=${encodeURIComponent(file.name)}`, file);
                 }}/>
               <div className={styles.fieldRow}>
                 <label>Markdown
